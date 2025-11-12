@@ -1,9 +1,17 @@
 import { useState } from 'react'
 import { CreditCard, Wallet, PlusCircle, Edit, Trash2, Power } from 'lucide-react'
 import { useData } from '../context/DataContext'
+import AddAccountModal from '../components/AddAccountModal'
+import EditAccountModal from '../components/EditAccountModal'
+import DeleteAccountModal from '../components/DeleteAccountModal'
 
 export default function Accounts() {
-  const { accounts, getTotalBalance } = useData()
+  const { accounts, getTotalBalance, addAccount, updateAccount, deleteAccount, toggleAccountStatus } = useData()
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [accountToEdit, setAccountToEdit] = useState<{ id: string; name: string; balance: number; color: string } | null>(null)
+  const [accountToDelete, setAccountToDelete] = useState<{ id: string; name: string; balance: number } | null>(null)
 
   const totalBalance = getTotalBalance()
   const activeAccounts = accounts.filter(acc => acc.isActive).length
@@ -14,6 +22,54 @@ export default function Accounts() {
       style: 'currency',
       currency: 'EUR'
     }).format(amount)
+  }
+
+  const handleAddAccount = (name: string, balance: number, color: string) => {
+    addAccount(name, balance, color)
+    console.log(`✅ Nuovo account aggiunto: ${name}`)
+  }
+
+  const handleEditClick = (id: string) => {
+    const account = accounts.find(acc => acc.id === id)
+    if (account) {
+      setAccountToEdit({
+        id: account.id,
+        name: account.name,
+        balance: account.balance,
+        color: account.color
+      })
+      setIsEditModalOpen(true)
+    }
+  }
+
+  const handleEditAccount = (id: string, name: string, balance: number, color: string) => {
+    updateAccount(id, { name, balance, color })
+    console.log(`✅ Account modificato: ${name}`)
+  }
+
+  const handleDeleteClick = (id: string) => {
+    const account = accounts.find(acc => acc.id === id)
+    if (account) {
+      setAccountToDelete({
+        id: account.id,
+        name: account.name,
+        balance: account.balance
+      })
+      setIsDeleteModalOpen(true)
+    }
+  }
+
+  const handleDeleteConfirm = () => {
+    if (accountToDelete) {
+      deleteAccount(accountToDelete.id)
+      console.log(`✅ Account eliminato: ${accountToDelete.name}`)
+    }
+  }
+
+  const handleToggleStatus = (id: string) => {
+    toggleAccountStatus(id)
+    const account = accounts.find(acc => acc.id === id)
+    console.log(`✅ Account ${account?.isActive ? 'disattivato' : 'attivato'}`)
   }
 
   return (
@@ -71,7 +127,10 @@ export default function Accounts() {
 
       {/* Add Account Button */}
       <div className="flex justify-end">
-        <button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-all shadow-md hover:shadow-lg">
+        <button 
+          onClick={() => setIsAddModalOpen(true)}
+          className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-all shadow-md hover:shadow-lg"
+        >
           <PlusCircle className="w-5 h-5" />
           Nuovo Account
         </button>
@@ -132,6 +191,7 @@ export default function Accounts() {
                 {/* Actions */}
                 <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button 
+                    onClick={() => handleToggleStatus(account.id)}
                     className={`p-3 rounded-lg transition-colors ${
                       account.isActive 
                         ? 'hover:bg-amber-50' 
@@ -142,12 +202,14 @@ export default function Accounts() {
                     <Power className={`w-5 h-5 ${account.isActive ? 'text-amber-600' : 'text-green-600'}`} />
                   </button>
                   <button 
+                    onClick={() => handleEditClick(account.id)}
                     className="p-3 hover:bg-blue-50 rounded-lg transition-colors"
                     title="Modifica account"
                   >
                     <Edit className="w-5 h-5 text-blue-600" />
                   </button>
                   <button 
+                    onClick={() => handleDeleteClick(account.id)}
                     className="p-3 hover:bg-red-50 rounded-lg transition-colors"
                     title="Elimina account"
                   >
@@ -165,6 +227,30 @@ export default function Accounts() {
           )}
         </div>
       </div>
+
+      {/* Add Account Modal */}
+      <AddAccountModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onConfirm={handleAddAccount}
+      />
+
+      {/* Edit Account Modal */}
+      <EditAccountModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onConfirm={handleEditAccount}
+        account={accountToEdit}
+      />
+
+      {/* Delete Account Modal */}
+      <DeleteAccountModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDeleteConfirm}
+        accountName={accountToDelete?.name || ''}
+        accountBalance={accountToDelete?.balance || 0}
+      />
     </div>
   )
 }
