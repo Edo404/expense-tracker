@@ -27,3 +27,12 @@ export interface Stats {
   expenseCount: number
   incomeCount: number
 }
+
+export interface Account {
+  id: string
+  name: string
+  balance: number
+  isActive: boolean
+  color: string
+  createdAt: string
+}

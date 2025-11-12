@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Expenses from './pages/Expenses'
 import Incomes from './pages/Incomes'
 import Categories from './pages/Categories'
+import Accounts from './pages/Accounts'
 
 function App() {
   const [activeTab, setActiveTab] = useState('home')
@@ -18,6 +19,8 @@ function App() {
         return <Incomes />
       case 'categories':
         return <Categories />
+      case 'accounts':
+        return <Accounts />
       default:
         return <Home />
     }

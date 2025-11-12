@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import type { Category, Transaction } from '../types'
+import type { Category, Transaction, Account } from '../types'
 
 // Dati iniziali di esempio
 const createInitialCategories = (): Category[] => {
@@ -164,19 +164,51 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
   ]
 }
 
+const createInitialAccounts = (): Account[] => {
+  return [
+    {
+      id: uuidv4(),
+      name: 'PayPal',
+      balance: 2000.00,
+      isActive: true,
+      color: 'bg-blue-500',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: uuidv4(),
+      name: 'Cash',
+      balance: 2000.00,
+      isActive: true,
+      color: 'bg-green-500',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: uuidv4(),
+      name: 'Bank Account',
+      balance: 2000.00,
+      isActive: true,
+      color: 'bg-indigo-500',
+      createdAt: new Date().toISOString(),
+    },
+  ]
+}
+
 // Hook per gestire localStorage
 export function useLocalStorage() {
   const STORAGE_KEYS = {
     CATEGORIES: 'expense-tracker-categories',
+    ACCOUNTS: 'expense-tracker-accounts',
     TRANSACTIONS: 'expense-tracker-transactions',
   }
   // Inizializza o recupera dati da localStorage
   const initializeData = () => {
     const storedCategories = localStorage.getItem(STORAGE_KEYS.CATEGORIES)
     const storedTransactions = localStorage.getItem(STORAGE_KEYS.TRANSACTIONS)
+    const storedAccounts = localStorage.getItem(STORAGE_KEYS.ACCOUNTS)
 
     let categories: Category[]
     let transactions: Transaction[]
+    let accounts: Account[]
 
     if (storedCategories) {
       categories = JSON.parse(storedCategories)
@@ -192,13 +224,21 @@ export function useLocalStorage() {
       localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(transactions))
     }
 
-    return { categories, transactions }
+    if (storedAccounts) {
+      accounts = JSON.parse(storedAccounts)
+    } else {
+      accounts = createInitialAccounts()
+      localStorage.setItem(STORAGE_KEYS.ACCOUNTS, JSON.stringify(accounts))
+    }
+
+    return { categories, transactions, accounts }
   }
 
-  const { categories: initialCats, transactions: initialTrans } = initializeData()
+  const { categories: initialCats, transactions: initialTrans, accounts: initialAccounts } = initializeData()
 
   const [categories, setCategories] = useState<Category[]>(initialCats)
   const [transactions, setTransactions] = useState<Transaction[]>(initialTrans)
+  const [accounts, setAccounts] = useState<Account[]>(initialAccounts)
 
   // Salva categories in localStorage quando cambiano
   useEffect(() => {
@@ -209,6 +249,11 @@ export function useLocalStorage() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(transactions))
   }, [transactions])
+
+  // Salva accounts in localStorage quando cambiano
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.ACCOUNTS, JSON.stringify(accounts))
+  }, [accounts])
   // ===== CATEGORY OPERATIONS =====
 
   const addCategory = (name: string, color: string, type: 'expense' | 'income', parentId?: string) => {
@@ -358,17 +403,57 @@ export function useLocalStorage() {
       total,
     }
   }
+  // ===== ACCOUNT OPERATIONS =====
+
+  const addAccount = (name: string, balance: number, color: string) => {
+    const newAccount: Account = {
+      id: uuidv4(),
+      name,
+      balance,
+      isActive: true,
+      color,
+      createdAt: new Date().toISOString(),
+    }
+    setAccounts([...accounts, newAccount])
+    return newAccount
+  }
+
+  const updateAccount = (id: string, updates: { name?: string; balance?: number; color?: string; isActive?: boolean }) => {
+    setAccounts(accounts.map(account => 
+      account.id === id ? { ...account, ...updates } : account
+    ))
+  }
+
+  const deleteAccount = (id: string) => {
+    setAccounts(accounts.filter(account => account.id !== id))
+  }
+
+  const toggleAccountStatus = (id: string) => {
+    setAccounts(accounts.map(account => 
+      account.id === id ? { ...account, isActive: !account.isActive } : account
+    ))
+  }
+
+  const getTotalBalance = () => {
+    return accounts
+      .filter(account => account.isActive)
+      .reduce((sum, account) => sum + account.balance, 0)
+  }
+
   // Reset tutto (per debug)
   const resetAllData = () => {
     const newCategories = createInitialCategories()
     const newTransactions = createInitialTransactions(newCategories)
+    const newAccounts = createInitialAccounts()
     setCategories(newCategories)
     setTransactions(newTransactions)
+    setAccounts(newAccounts)
   }
   return {
     // Data
     categories,
     transactions,
+    accounts,
     // Category operations
     addCategory,
     updateCategory,
@@ -382,6 +467,12 @@ export function useLocalStorage() {
     deleteTransaction,
     getTransactionsByType,
     getTransactionsByCategory,
+    // Account operations
+    addAccount,
+    updateAccount,
+    deleteAccount,
+    toggleAccountStatus,
+    getTotalBalance,
     // Statistics
     getStats,
     getCategoryStats,

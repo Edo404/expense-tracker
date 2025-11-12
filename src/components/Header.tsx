@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Home, TrendingDown, TrendingUp, FolderOpen, Wallet, Menu, X } from 'lucide-react'
+import { Home, TrendingDown, TrendingUp, FolderOpen, Wallet, Menu, X, CreditCard } from 'lucide-react'
 
 interface HeaderProps {
   activeTab: string
@@ -14,6 +14,7 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
     { id: 'expenses', label: 'Expenses', icon: TrendingDown },
     { id: 'incomes', label: 'Incomes', icon: TrendingUp },
     { id: 'categories', label: 'Categories', icon: FolderOpen },
+    { id: 'accounts', label: 'Accounts', icon: CreditCard },
   ]
 
   const handleTabClick = (tabId: string) => {
