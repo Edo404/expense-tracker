@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { PlusCircle, TrendingDown, TrendingUp, Wallet } from 'lucide-react'
 import { useData } from '../context/DataContext'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 export default function Home() {
   const { getStats, transactions } = useData()
@@ -23,6 +24,43 @@ export default function Home() {
     const date = new Date(dateString)
     return date.toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' })
   }
+
+  // Calcola l'andamento del portafoglio nel tempo
+  const portfolioData = useMemo(() => {
+    // Ordina le transazioni per data
+    const sorted = [...transactions].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    
+    let balance = 0
+    const data: { date: string; saldo: number; entrate: number; spese: number }[] = []
+    
+    // Raggruppa per data
+    const groupedByDate = sorted.reduce((acc, t) => {
+      const date = t.date
+      if (!acc[date]) {
+        acc[date] = { incomes: 0, expenses: 0 }
+      }
+      if (t.type === 'income') {
+        acc[date].incomes += t.amount
+      } else {
+        acc[date].expenses += t.amount
+      }
+      return acc
+    }, {} as Record<string, { incomes: number; expenses: number }>)
+    
+    // Crea i dati per il grafico
+    Object.entries(groupedByDate).forEach(([date, values]) => {
+      balance += values.incomes - values.expenses
+      data.push({
+        date: new Date(date).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' }),
+        saldo: parseFloat(balance.toFixed(2)),
+        entrate: parseFloat(values.incomes.toFixed(2)),
+        spese: parseFloat(values.expenses.toFixed(2))
+      })
+    })
+    
+    return data
+  }, [transactions])
+
   return (
     <div className="space-y-8">
       {/* Page Title */}
@@ -115,12 +153,72 @@ export default function Home() {
       </div>
 
       {/* Coming Soon */}
-      <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl shadow-lg p-8 text-center border border-indigo-100">
-        <div className="text-6xl mb-4">📊</div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Grafici in Arrivo!</h2>
-        <p className="text-gray-600">
-          Visualizza le tue spese con grafici interattivi, analisi mensili e molto altro!
-        </p>
+      <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
+          <div className="w-1 h-6 md:h-8 bg-indigo-600 rounded-full"></div>
+          Andamento Portafoglio
+        </h2>
+        {portfolioData.length > 0 ? (
+          <ResponsiveContainer width="100%" height={400}>
+            <LineChart data={portfolioData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis 
+                dataKey="date" 
+                tick={{ fontSize: 12 }}
+                stroke="#888888"
+              />
+              <YAxis 
+                tick={{ fontSize: 12 }}
+                stroke="#888888"
+                tickFormatter={(value) => `€${value}`}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'white', 
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                }}
+                formatter={(value: number) => `€${value.toFixed(2)}`}
+              />
+              <Legend 
+                wrapperStyle={{ paddingTop: '20px' }}
+                iconType="line"
+              />
+              <Line 
+                type="monotone" 
+                dataKey="saldo" 
+                stroke="#6366f1" 
+                strokeWidth={3}
+                dot={{ fill: '#6366f1', r: 4 }}
+                activeDot={{ r: 6 }}
+                name="Saldo"
+              />
+              <Line 
+                type="monotone" 
+                dataKey="entrate" 
+                stroke="#10b981" 
+                strokeWidth={2}
+                dot={{ fill: '#10b981', r: 3 }}
+                name="Entrate"
+              />
+              <Line 
+                type="monotone" 
+                dataKey="spese" 
+                stroke="#ef4444" 
+                strokeWidth={2}
+                dot={{ fill: '#ef4444', r: 3 }}
+                name="Spese"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">📊</div>
+            <p className="text-gray-500 text-lg">Nessun dato disponibile</p>
+            <p className="text-gray-400 text-sm">Aggiungi transazioni per visualizzare il grafico</p>
+          </div>
+        )}
       </div>
     </div>
   )
