@@ -2,13 +2,15 @@ import { X, PlusCircle } from 'lucide-react'
 import { useState } from 'react'
 import DatePicker from './DatePicker'
 import CategorySelect from './CategorySelect'
+import AccountSelect from './AccountSelect'
 
 interface AddTransactionModalProps {
   isOpen: boolean
   onClose: () => void
-  onConfirm: (description: string, amount: number, categoryId: string, date: string) => void
+  onConfirm: (description: string, amount: number, categoryId: string, accountId: string, date: string) => void
   type: 'expense' | 'income'
   categories: Array<{ id: string; name: string; parentId?: string }>
+  accounts: Array<{ id: string; name: string; color: string; isActive: boolean }>
 }
 
 export default function AddTransactionModal({
@@ -17,11 +19,13 @@ export default function AddTransactionModal({
   onConfirm,
   type,
   categories,
+  accounts,
 }: AddTransactionModalProps) {  const [description, setDescription] = useState('')
   const [amount, setAmount] = useState('')
   const [categoryId, setCategoryId] = useState('')
+  const [accountId, setAccountId] = useState('')
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]) // Data odierna come default
-  const [errors, setErrors] = useState<{ description?: string; amount?: string; category?: string; date?: string }>({})
+  const [errors, setErrors] = useState<{ description?: string; amount?: string; category?: string; account?: string; date?: string }>({})
 
   if (!isOpen) return null
 
@@ -29,7 +33,7 @@ export default function AddTransactionModal({
     e.preventDefault()
     
     // Validazione
-    const newErrors: { description?: string; amount?: string; category?: string; date?: string } = {}
+    const newErrors: { description?: string; amount?: string; category?: string; account?: string; date?: string } = {}
     
     if (!description.trim()) {
       newErrors.description = 'La descrizione è obbligatoria'
@@ -44,6 +48,10 @@ export default function AddTransactionModal({
       newErrors.category = 'Seleziona una categoria'
     }
     
+    if (!accountId) {
+      newErrors.account = 'Seleziona un account'
+    }
+    
     if (!date) {
       newErrors.date = 'La data è obbligatoria'
     }
@@ -54,12 +62,13 @@ export default function AddTransactionModal({
     }
 
     // Invia i dati
-    onConfirm(description.trim(), parsedAmount, categoryId, date)
+    onConfirm(description.trim(), parsedAmount, categoryId, accountId, date)
     
     // Reset form
     setDescription('')
     setAmount('')
     setCategoryId('')
+    setAccountId('')
     setDate(new Date().toISOString().split('T')[0])
     setErrors({})
     onClose()
@@ -68,6 +77,7 @@ export default function AddTransactionModal({
     setDescription('')
     setAmount('')
     setCategoryId('')
+    setAccountId('')
     setDate(new Date().toISOString().split('T')[0])
     setErrors({})
     onClose()
@@ -175,6 +185,17 @@ export default function AddTransactionModal({
               <p className="mt-1 text-sm text-red-600">{errors.amount}</p>
             )}
           </div>
+
+          {/* Account */}
+          <AccountSelect
+            value={accountId}
+            onChange={(value) => {
+              setAccountId(value)
+              if (errors.account) setErrors({ ...errors, account: undefined })
+            }}
+            accounts={accounts}
+            error={errors.account}
+          />
 
           {/* Anteprima */}
           <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl border-2 border-gray-200">

@@ -15,6 +15,8 @@ export interface Transaction {
   amount: number
   categoryId: string
   categoryName: string
+  accountId: string
+  accountName: string
   description: string
   date: string // ISO string format
   createdAt: string

@@ -27,50 +27,50 @@ export default function Home() {
     <div className="space-y-8">
       {/* Page Title */}
       <div className="text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 rounded-full mb-4">
-          <Wallet className="w-8 h-8 text-indigo-600" />
+        <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-indigo-100 rounded-full mb-3 md:mb-4">
+          <Wallet className="w-6 h-6 md:w-8 md:h-8 text-indigo-600" />
         </div>
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">Home</h1>
-        <p className="text-gray-600 text-lg">Benvenuto nel tuo Expense Tracker personale</p>
+        <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">Home</h1>
+        <p className="text-gray-600 text-sm md:text-lg">Benvenuto nel tuo Expense Tracker personale</p>
       </div>      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-sm font-medium mb-1">Totale Spese</p>
-              <p className="text-3xl font-bold text-red-600">€{stats.totalExpenses.toFixed(2)}</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Totale Spese</p>
+              <p className="text-2xl md:text-3xl font-bold text-red-600">€{stats.totalExpenses.toFixed(2)}</p>
               <p className="text-xs text-gray-400 mt-1">{stats.expenseCount} transazioni</p>
             </div>
-            <div className="bg-red-100 p-3 rounded-full">
-              <TrendingDown className="w-8 h-8 text-red-500" />
+            <div className="bg-red-100 p-2 md:p-3 rounded-full">
+              <TrendingDown className="w-6 h-6 md:w-8 md:h-8 text-red-500" />
             </div>
           </div>
         </div>
         
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-sm font-medium mb-1">Entrate</p>
-              <p className="text-3xl font-bold text-green-600">€{stats.totalIncomes.toFixed(2)}</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Entrate</p>
+              <p className="text-2xl md:text-3xl font-bold text-green-600">€{stats.totalIncomes.toFixed(2)}</p>
               <p className="text-xs text-gray-400 mt-1">{stats.incomeCount} transazioni</p>
             </div>
-            <div className="bg-green-100 p-3 rounded-full">
-              <TrendingUp className="w-8 h-8 text-green-500" />
+            <div className="bg-green-100 p-2 md:p-3 rounded-full">
+              <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-green-500" />
             </div>
           </div>
         </div>
         
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-sm font-medium mb-1">Bilancio</p>
-              <p className={`text-3xl font-bold ${stats.balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Bilancio</p>
+              <p className={`text-2xl md:text-3xl font-bold ${stats.balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
                 €{stats.balance.toFixed(2)}
               </p>
               <p className="text-xs text-gray-400 mt-1">Saldo disponibile</p>
             </div>
-            <div className="bg-blue-100 p-3 rounded-full">
-              <Wallet className="w-8 h-8 text-blue-500" />
+            <div className="bg-blue-100 p-2 md:p-3 rounded-full">
+              <Wallet className="w-6 h-6 md:w-8 md:h-8 text-blue-500" />
             </div>
           </div>
         </div>
@@ -78,17 +78,17 @@ export default function Home() {
 
       {/* Add Transaction Button */}
       <div className="text-center">
-        <button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl flex items-center gap-3 mx-auto transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
+        <button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 md:px-8 py-3 md:py-4 text-sm md:text-base rounded-xl flex items-center gap-2 md:gap-3 mx-auto transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
           <PlusCircle className="w-6 h-6" />
           <span className="font-semibold text-lg">Aggiungi Transazione</span>
         </button>
       </div>      {/* Quick Summary */}
-      <div className="bg-white rounded-xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-          <div className="w-1 h-8 bg-indigo-600 rounded-full"></div>
+      <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
+          <div className="w-1 h-6 md:h-8 bg-indigo-600 rounded-full"></div>
           Riepilogo Rapido
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="border-l-4 border-red-500 pl-4">
             <p className="text-gray-500 text-sm mb-1">Spesa più grande</p>
             {largestExpense ? (

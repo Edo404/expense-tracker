@@ -122,33 +122,33 @@ export default function Categories() {
     <div className="space-y-8">
       {/* Page Title */}
       <div className="text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
-          <FolderOpen className="w-8 h-8 text-purple-600" />
+        <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-purple-100 rounded-full mb-3 md:mb-4">
+          <FolderOpen className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />
         </div>
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">Categories</h1>
-        <p className="text-gray-600 text-lg">Organizza le tue transazioni per categoria</p>
+        <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">Categories</h1>
+        <p className="text-gray-600 text-sm md:text-lg">Organizza le tue transazioni per categoria</p>
       </div>      {/* Add Category Buttons */}
-      <div className="flex flex-col sm:flex-row justify-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
         <button 
           onClick={() => handleOpenAddModal('expense')}
-          className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-8 py-4 rounded-xl flex items-center justify-center gap-3 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+          className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-6 md:px-8 py-3 md:py-4 text-sm md:text-base rounded-xl flex items-center justify-center gap-2 md:gap-3 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
         >
-          <PlusCircle className="w-6 h-6" />
-          <span className="font-semibold text-lg">Nuova Categoria Spesa</span>
+          <PlusCircle className="w-5 h-5 md:w-6 md:h-6" />
+          <span className="font-semibold">Nuova Categoria Spesa</span>
         </button>
         <button 
           onClick={() => handleOpenAddModal('income')}
-          className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white px-8 py-4 rounded-xl flex items-center justify-center gap-3 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+          className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white px-6 md:px-8 py-3 md:py-4 text-sm md:text-base rounded-xl flex items-center justify-center gap-2 md:gap-3 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
         >
-          <PlusCircle className="w-6 h-6" />
-          <span className="font-semibold text-lg">Nuova Categoria Entrata</span>
+          <PlusCircle className="w-5 h-5 md:w-6 md:h-6" />
+          <span className="font-semibold">Nuova Categoria Entrata</span>
         </button>
       </div>{/* Categories Grid - Side by Side on Large Screens */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Expense Categories */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <div className="w-1 h-8 bg-red-600 rounded-full"></div>
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
+            <div className="w-1 h-6 md:h-8 bg-red-600 rounded-full"></div>
             Categorie Spese
           </h2>          <div className="grid grid-cols-1 gap-4">
             {expenseCategories.map((category) => (
@@ -229,9 +229,9 @@ export default function Categories() {
         </div>
 
         {/* Income Categories */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <div className="w-1 h-8 bg-green-600 rounded-full"></div>
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
+            <div className="w-1 h-6 md:h-8 bg-green-600 rounded-full"></div>
             Categorie Entrate
           </h2>          <div className="grid grid-cols-1 gap-4">
             {incomeCategories.map((category) => (

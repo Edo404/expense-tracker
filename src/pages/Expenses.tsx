@@ -6,7 +6,7 @@ import EditTransactionModal from '../components/EditTransactionModal'
 import AddTransactionModal from '../components/AddTransactionModal'
 
 export default function Expenses() {
-  const { getTransactionsByType, deleteTransaction, updateTransaction, getCategoriesByType, addTransaction } = useData()
+  const { getTransactionsByType, deleteTransaction, updateTransaction, getCategoriesByType, addTransaction, accounts } = useData()
   const expenses = getTransactionsByType('expense')
   const [searchQuery, setSearchQuery] = useState('')
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -19,6 +19,8 @@ export default function Expenses() {
     amount: number
     categoryId: string
     categoryName: string
+    accountId: string
+    accountName: string
     date: string
     type: 'expense' | 'income'
   } | null>(null)
@@ -51,6 +53,8 @@ export default function Expenses() {
         amount: expense.amount,
         categoryId: expense.categoryId,
         categoryName: expense.categoryName,
+        accountId: expense.accountId,
+        accountName: expense.accountName,
         date: expense.date,
         type: 'expense'
       })
@@ -82,116 +86,131 @@ export default function Expenses() {
     }
   }
 
-  const handleAddTransaction = (description: string, amount: number, categoryId: string, date: string) => {
-    addTransaction('expense', amount, categoryId, description, date)
+  const handleAddTransaction = (description: string, amount: number, categoryId: string, accountId: string, date: string) => {
+    addTransaction('expense', amount, categoryId, accountId, description, date)
     console.log(`✅ Nuova spesa aggiunta: ${description}`)
   }
   return (
     <div className="space-y-8">
       {/* Page Title */}
       <div className="text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
-          <TrendingDown className="w-8 h-8 text-red-600" />
+        <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-red-100 rounded-full mb-3 md:mb-4">
+          <TrendingDown className="w-6 h-6 md:w-8 md:h-8 text-red-600" />
         </div>
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">Expenses</h1>
-        <p className="text-gray-600 text-lg">Gestisci e monitora tutte le tue spese</p>
+        <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">Expenses</h1>
+        <p className="text-gray-600 text-sm md:text-lg">Gestisci e monitora tutte le tue spese</p>
       </div>      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-sm font-medium mb-1">Spese Totali</p>
-              <p className="text-3xl font-bold text-red-600">€{stats.total.toFixed(2)}</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Spese Totali</p>
+              <p className="text-2xl md:text-3xl font-bold text-red-600">€{stats.total.toFixed(2)}</p>
               <p className="text-xs text-gray-400 mt-1">Totale registrato</p>
             </div>
-            <div className="bg-red-100 p-3 rounded-full">
-              <TrendingDown className="w-8 h-8 text-red-500" />
+            <div className="bg-red-100 p-2 md:p-3 rounded-full">
+              <TrendingDown className="w-6 h-6 md:w-8 md:h-8 text-red-500" />
             </div>
           </div>
         </div>
         
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-sm font-medium mb-1">Numero Transazioni</p>
-              <p className="text-3xl font-bold text-gray-800">{stats.count}</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Numero Transazioni</p>
+              <p className="text-2xl md:text-3xl font-bold text-gray-800">{stats.count}</p>
               <p className="text-xs text-gray-400 mt-1">Spese registrate</p>
             </div>
-            <div className="bg-orange-100 p-3 rounded-full">
-              <Calendar className="w-8 h-8 text-orange-500" />
+            <div className="bg-orange-100 p-2 md:p-3 rounded-full">
+              <Calendar className="w-6 h-6 md:w-8 md:h-8 text-orange-500" />
             </div>
           </div>
         </div>
         
-        <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-sm font-medium mb-1">Media Giornaliera</p>
-              <p className="text-3xl font-bold text-purple-600">€{stats.averageDaily.toFixed(2)}</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Media Giornaliera</p>
+              <p className="text-2xl md:text-3xl font-bold text-purple-600">€{stats.averageDaily.toFixed(2)}</p>
               <p className="text-xs text-gray-400 mt-1">Ultimi 30 giorni</p>
             </div>
-            <div className="bg-purple-100 p-3 rounded-full">
-              <TrendingDown className="w-8 h-8 text-purple-500" />
+            <div className="bg-purple-100 p-2 md:p-3 rounded-full">
+              <TrendingDown className="w-6 h-6 md:w-8 md:h-8 text-purple-500" />
             </div>
           </div>
         </div>
       </div>
 
       {/* Search and Filter */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <div className="flex flex-col md:flex-row gap-4">          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+      <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+        <div className="flex flex-col md:flex-row gap-3 md:gap-4">          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-400" />
             <input
               type="text"
               placeholder="Cerca spese..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              className="w-full pl-9 md:pl-10 pr-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
             />
           </div>
           <button 
             onClick={() => setIsAddModalOpen(true)}
-            className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-all shadow-md hover:shadow-lg"
+            className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base rounded-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
           >
-            <PlusCircle className="w-5 h-5" />
+            <PlusCircle className="w-4 h-4 md:w-5 md:h-5" />
             Nuova Spesa
           </button>
         </div>
       </div>
 
       {/* Expenses List */}
-      <div className="bg-white rounded-xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-          <div className="w-1 h-8 bg-red-600 rounded-full"></div>
+      <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
+          <div className="w-1 h-6 md:h-8 bg-red-600 rounded-full"></div>
           Ultime Spese
         </h2>          <div className="space-y-4">
           {filteredExpenses.length > 0 ? (
             filteredExpenses.map((expense) => (
-              <div key={expense.id} className="group flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-all border border-gray-100 hover:border-gray-300 hover:shadow-md">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                    <TrendingDown className="w-6 h-6 text-red-600" />
+              <div key={expense.id} className="flex flex-col md:flex-row md:items-center gap-4 p-4 md:p-6 rounded-xl transition-all border-2 bg-white border-gray-200 hover:border-red-300 hover:shadow-md">
+                <div className="flex items-center gap-3 md:gap-4 flex-1">
+                  {/* Icon */}
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <TrendingDown className="w-6 h-6 md:w-8 md:h-8 text-red-600" />
                   </div>
-                  <div>
-                    <p className="font-semibold text-gray-800">{expense.description}</p>
-                    <p className="text-sm text-gray-500">{expense.categoryName} • {formatDate(expense.date)}</p>
+                  
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-800 truncate">{expense.description}</h3>
+                    <p className="text-xs md:text-sm text-gray-500 mt-1 truncate">
+                      {expense.categoryName} • {formatDate(expense.date)}
+                    </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <p className="text-xl font-bold text-red-600">-€{expense.amount.toFixed(2)}</p>                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+
+                {/* Amount and Actions */}
+                <div className="flex items-center justify-between md:justify-end gap-4">
+                  {/* Amount */}
+                  <div>
+                    <p className="text-xl md:text-2xl font-bold text-red-600">
+                      -€{expense.amount.toFixed(2)}
+                    </p>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-1 md:gap-2">
                     <button 
                       onClick={() => handleEditClick(expense.id)}
-                      className="p-2 hover:bg-blue-50 rounded-lg transition-colors"
+                      className="p-2 md:p-3 hover:bg-gray-100 rounded-lg transition-colors"
                       title="Modifica spesa"
                     >
-                      <Edit className="w-4 h-4 text-blue-600" />
+                      <Edit className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
                     </button>
                     <button 
                       onClick={() => handleDeleteClick(expense.id)}
-                      className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 md:p-3 hover:bg-red-50 rounded-lg transition-colors"
                       title="Elimina spesa"
                     >
-                      <Trash2 className="w-4 h-4 text-red-600" />
+                      <Trash2 className="w-4 h-4 md:w-5 md:h-5 text-red-600" />
                     </button>
                   </div>
                 </div>
@@ -227,6 +246,7 @@ export default function Expenses() {
         onConfirm={handleEditTransaction}
         transaction={transactionToEdit}
         categories={getCategoriesByType('expense')}
+        accounts={accounts}
       />
 
       {/* Add Transaction Modal */}
@@ -236,6 +256,7 @@ export default function Expenses() {
         onConfirm={handleAddTransaction}
         type="expense"
         categories={getCategoriesByType('expense')}
+        accounts={accounts}
       />
     </div>
   )

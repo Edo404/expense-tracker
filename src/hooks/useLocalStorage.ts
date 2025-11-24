@@ -29,9 +29,12 @@ const createInitialCategories = (): Category[] => {
   ]
 }
 
-const createInitialTransactions = (categories: Category[]): Transaction[] => {
+const createInitialTransactions = (categories: Category[], accounts: Account[]): Transaction[] => {
   const expenseCategories = categories.filter(c => c.type === 'expense')
   const incomeCategories = categories.filter(c => c.type === 'income')
+  
+  // Usa il primo account disponibile come default
+  const defaultAccount = accounts[0]
   
   // Trova le sotto-categorie specifiche
   const bolletteCategory = categories.find(c => c.name === 'Bollette')
@@ -45,6 +48,8 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
       amount: 87.50,
       categoryId: expenseCategories[0]?.id || '',
       categoryName: expenseCategories[0]?.name || '',
+      accountId: defaultAccount?.id || '',
+      accountName: defaultAccount?.name || '',
       description: 'Spesa al supermercato',
       date: '2025-11-03',
       createdAt: new Date().toISOString(),
@@ -55,6 +60,8 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
       amount: 65.00,
       categoryId: expenseCategories[1]?.id || '',
       categoryName: expenseCategories[1]?.name || '',
+      accountId: defaultAccount?.id || '',
+      accountName: defaultAccount?.name || '',
       description: 'Benzina',
       date: '2025-11-02',
       createdAt: new Date().toISOString(),
@@ -65,6 +72,8 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
       amount: 45.00,
       categoryId: expenseCategories[2]?.id || '',
       categoryName: expenseCategories[2]?.name || '',
+      accountId: defaultAccount?.id || '',
+      accountName: defaultAccount?.name || '',
       description: 'Cena ristorante',
       date: '2025-11-01',
       createdAt: new Date().toISOString(),
@@ -75,6 +84,8 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
       amount: 450.00,
       categoryId: expenseCategories[3]?.id || '',
       categoryName: expenseCategories[3]?.name || '',
+      accountId: defaultAccount?.id || '',
+      accountName: defaultAccount?.name || '',
       description: 'Affitto',
       date: '2025-11-01',
       createdAt: new Date().toISOString(),
@@ -86,6 +97,8 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
       amount: 85.00,
       categoryId: bolletteCategory?.id || '',
       categoryName: bolletteCategory?.name || '',
+      accountId: defaultAccount?.id || '',
+      accountName: defaultAccount?.name || '',
       description: 'Bolletta elettricità',
       date: '2025-10-28',
       createdAt: new Date().toISOString(),
@@ -96,6 +109,8 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
       amount: 45.00,
       categoryId: bolletteCategory?.id || '',
       categoryName: bolletteCategory?.name || '',
+      accountId: defaultAccount?.id || '',
+      accountName: defaultAccount?.name || '',
       description: 'Bolletta gas',
       date: '2025-10-25',
       createdAt: new Date().toISOString(),
@@ -107,6 +122,8 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
       amount: 2800.00,
       categoryId: incomeCategories[0]?.id || '',
       categoryName: incomeCategories[0]?.name || '',
+      accountId: defaultAccount?.id || '',
+      accountName: defaultAccount?.name || '',
       description: 'Stipendio',
       date: '2025-10-30',
       createdAt: new Date().toISOString(),
@@ -117,6 +134,8 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
       amount: 450.00,
       categoryId: incomeCategories[1]?.id || '',
       categoryName: incomeCategories[1]?.name || '',
+      accountId: defaultAccount?.id || '',
+      accountName: defaultAccount?.name || '',
       description: 'Freelance Web Design',
       date: '2025-10-25',
       createdAt: new Date().toISOString(),
@@ -126,6 +145,8 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
       amount: 120.00,
       categoryId: incomeCategories[2]?.id || '',
       categoryName: incomeCategories[2]?.name || '',
+      accountId: defaultAccount?.id || '',
+      accountName: defaultAccount?.name || '',
       description: 'Vendita Online',
       date: '2025-10-20',
       createdAt: new Date().toISOString(),
@@ -136,6 +157,8 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
       amount: 300.00,
       categoryId: incomeCategories[3]?.id || '',
       categoryName: incomeCategories[3]?.name || '',
+      accountId: defaultAccount?.id || '',
+      accountName: defaultAccount?.name || '',
       description: 'Bonus',
       date: '2025-10-15',
       createdAt: new Date().toISOString(),
@@ -147,6 +170,8 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
       amount: 250.00,
       categoryId: strumentiMusicaliCategory?.id || '',
       categoryName: strumentiMusicaliCategory?.name || '',
+      accountId: defaultAccount?.id || '',
+      accountName: defaultAccount?.name || '',
       description: 'Vendita chitarra usata',
       date: '2025-10-18',
       createdAt: new Date().toISOString(),
@@ -157,6 +182,8 @@ const createInitialTransactions = (categories: Category[]): Transaction[] => {
       amount: 180.00,
       categoryId: strumentiMusicaliCategory?.id || '',
       categoryName: strumentiMusicaliCategory?.name || '',
+      accountId: defaultAccount?.id || '',
+      accountName: defaultAccount?.name || '',
       description: 'Vendita amplificatore',
       date: '2025-10-12',
       createdAt: new Date().toISOString(),
@@ -217,18 +244,18 @@ export function useLocalStorage() {
       localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories))
     }
 
-    if (storedTransactions) {
-      transactions = JSON.parse(storedTransactions)
-    } else {
-      transactions = createInitialTransactions(categories)
-      localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(transactions))
-    }
-
     if (storedAccounts) {
       accounts = JSON.parse(storedAccounts)
     } else {
       accounts = createInitialAccounts()
       localStorage.setItem(STORAGE_KEYS.ACCOUNTS, JSON.stringify(accounts))
+    }
+
+    if (storedTransactions) {
+      transactions = JSON.parse(storedTransactions)
+    } else {
+      transactions = createInitialTransactions(categories, accounts)
+      localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(transactions))
     }
 
     return { categories, transactions, accounts }
@@ -324,12 +351,14 @@ export function useLocalStorage() {
     type: 'expense' | 'income',
     amount: number,
     categoryId: string,
+    accountId: string,
     description: string,
     date: string
   ) => {
     const category = categories.find(cat => cat.id === categoryId)
-    if (!category) {
-      throw new Error('Category not found')
+    const account = accounts.find(acc => acc.id === accountId)
+    if (!category || !account) {
+      throw new Error('Category or Account not found')
     }
 
     const newTransaction: Transaction = {
@@ -338,19 +367,35 @@ export function useLocalStorage() {
       amount,
       categoryId,
       categoryName: category.name,
+      accountId,
+      accountName: account.name,
       description,
       date,
       createdAt: new Date().toISOString(),
     }
+    
+    // Aggiorna il balance dell'account
+    const updatedBalance = type === 'expense' 
+      ? account.balance - amount 
+      : account.balance + amount
+    
+    setAccounts(prev => prev.map(a => 
+      a.id === accountId ? { ...a, balance: updatedBalance } : a
+    ))
+    
     setTransactions(prev => [...prev, newTransaction])
     return newTransaction
   }
 
   const updateTransaction = (id: string, updates: Partial<Omit<Transaction, 'id' | 'createdAt'>>) => {
+    const oldTransaction = transactions.find(t => t.id === id)
+    if (!oldTransaction) return
+
     setTransactions(prev =>
       prev.map(trans => {
         if (trans.id === id) {
           const updated = { ...trans, ...updates }
+          
           // Se la categoria è cambiata, aggiorna anche il nome
           if (updates.categoryId) {
             const category = categories.find(cat => cat.id === updates.categoryId)
@@ -358,14 +403,66 @@ export function useLocalStorage() {
               updated.categoryName = category.name
             }
           }
+          
+          // Se l'account è cambiato, aggiorna anche il nome
+          if (updates.accountId) {
+            const account = accounts.find(acc => acc.id === updates.accountId)
+            if (account) {
+              updated.accountName = account.name
+            }
+          }
+          
           return updated
         }
         return trans
       })
     )
+    
+    // Gestisci gli aggiornamenti del balance degli account
+    const newAmount = updates.amount ?? oldTransaction.amount
+    const newType = updates.type ?? oldTransaction.type
+    const newAccountId = updates.accountId ?? oldTransaction.accountId
+    
+    setAccounts(prev => prev.map(acc => {
+      let newBalance = acc.balance
+      
+      // Ripristina il balance del vecchio account
+      if (acc.id === oldTransaction.accountId) {
+        if (oldTransaction.type === 'expense') {
+          newBalance += oldTransaction.amount // Ripristina (aggiungi)
+        } else {
+          newBalance -= oldTransaction.amount // Ripristina (sottrai)
+        }
+      }
+      
+      // Applica il balance al nuovo account
+      if (acc.id === newAccountId) {
+        if (newType === 'expense') {
+          newBalance -= newAmount // Sottrai la spesa
+        } else {
+          newBalance += newAmount // Aggiungi l'entrata
+        }
+      }
+      
+      return { ...acc, balance: newBalance }
+    }))
   }
 
   const deleteTransaction = (id: string) => {
+    const transaction = transactions.find(t => t.id === id)
+    if (!transaction) return
+    
+    // Ripristina il balance dell'account
+    setAccounts(prev => prev.map(acc => {
+      if (acc.id === transaction.accountId) {
+        const restoredBalance = transaction.type === 'expense'
+          ? acc.balance + transaction.amount // Ripristina spesa
+          : acc.balance - transaction.amount // Ripristina entrata
+        return { ...acc, balance: restoredBalance }
+      }
+      return acc
+    }))
+    
     setTransactions(prev => prev.filter(trans => trans.id !== id))
   }
 
@@ -443,8 +540,8 @@ export function useLocalStorage() {
   // Reset tutto (per debug)
   const resetAllData = () => {
     const newCategories = createInitialCategories()
-    const newTransactions = createInitialTransactions(newCategories)
     const newAccounts = createInitialAccounts()
+    const newTransactions = createInitialTransactions(newCategories, newAccounts)
     setCategories(newCategories)
     setTransactions(newTransactions)
     setAccounts(newAccounts)
