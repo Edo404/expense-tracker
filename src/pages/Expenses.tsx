@@ -44,7 +44,7 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' })
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
   }
 
   // Inizializza i filtri con il mese corrente
@@ -125,8 +125,8 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
     }
   }
 
-  const handleEditTransaction = (id: string, description: string, amount: number, categoryId: string, date: string) => {
-    updateTransaction(id, { description, amount, categoryId, date })
+  const handleEditTransaction = (id: string, description: string, amount: number, categoryId: string, accountId: string, date: string) => {
+    updateTransaction(id, { description, amount, categoryId, accountId, date })
     console.log(`✅ Spesa modificata: ${description}`)
   }
 
@@ -161,15 +161,15 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
           <TrendingDown className="w-6 h-6 md:w-8 md:h-8 text-red-600" />
         </div>
         <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">Expenses</h1>
-        <p className="text-gray-600 text-sm md:text-lg">Gestisci e monitora tutte le tue spese</p>
+        <p className="text-gray-600 text-sm md:text-lg">Manage and monitor all your expenses</p>
       </div>      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Spese Totali</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Total Expenses</p>
               <p className="text-2xl md:text-3xl font-bold text-red-600">€{stats.total.toFixed(2)}</p>
-              <p className="text-xs text-gray-400 mt-1">Totale registrato</p>
+              <p className="text-xs text-gray-400 mt-1">Total recorded</p>
             </div>
             <div className="bg-red-100 p-2 md:p-3 rounded-full">
               <TrendingDown className="w-6 h-6 md:w-8 md:h-8 text-red-500" />
@@ -180,9 +180,9 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Numero Transazioni</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Number of Transactions</p>
               <p className="text-2xl md:text-3xl font-bold text-gray-800">{stats.count}</p>
-              <p className="text-xs text-gray-400 mt-1">Spese registrate</p>
+              <p className="text-xs text-gray-400 mt-1">Expenses recorded</p>
             </div>
             <div className="bg-orange-100 p-2 md:p-3 rounded-full">
               <Calendar className="w-6 h-6 md:w-8 md:h-8 text-orange-500" />
@@ -193,9 +193,9 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Media Giornaliera</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Daily Average</p>
               <p className="text-2xl md:text-3xl font-bold text-purple-600">€{stats.averageDaily.toFixed(2)}</p>
-              <p className="text-xs text-gray-400 mt-1">Ultimi 30 giorni</p>
+              <p className="text-xs text-gray-400 mt-1">Last 30 days</p>
             </div>
             <div className="bg-purple-100 p-2 md:p-3 rounded-full">
               <TrendingDown className="w-6 h-6 md:w-8 md:h-8 text-purple-500" />
@@ -213,7 +213,7 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Cerca spese..."
+                placeholder="Search expenses..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 md:pl-10 pr-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
@@ -224,7 +224,7 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
               className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base rounded-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg whitespace-nowrap"
             >
               <PlusCircle className="w-4 h-4 md:w-5 md:h-5" />
-              Nuova Spesa
+              New Expense
             </button>
           </div>
 
@@ -232,25 +232,25 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {/* Filtro Data Inizio */}
             <DatePicker
-              label="Data Inizio"
+              label="Start Date"
               value={startDate}
               onChange={setStartDate}
             />
 
             {/* Filtro Data Fine */}
             <DatePicker
-              label="Data Fine"
+              label="End Date"
               value={endDate}
               onChange={setEndDate}
             />
 
             {/* Filtro Categoria */}
             <CategorySelect
-              label="Categoria"
+              label="Category"
               categories={categories}
               value={selectedCategory}
               onChange={setSelectedCategory}
-              placeholder="Tutte le categorie"
+              placeholder="All categories"
               allowEmpty
             />
           </div>
@@ -263,7 +263,7 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
                 className="text-sm text-gray-600 hover:text-red-600 flex items-center gap-1 px-3 py-1 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <X className="w-4 h-4" />
-                Cancella filtri
+                Clear filters
               </button>
             </div>
           )}
@@ -274,7 +274,7 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
       <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
           <div className="w-1 h-6 md:h-8 bg-red-600 rounded-full"></div>
-          Ultime Spese
+          Recent Expenses
         </h2>          <div className="space-y-4">
           {filteredExpenses.length > 0 ? (
             filteredExpenses.map((expense) => (
@@ -308,14 +308,14 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
                     <button 
                       onClick={() => handleEditClick(expense.id)}
                       className="p-2 md:p-3 hover:bg-gray-100 rounded-lg transition-colors"
-                      title="Modifica spesa"
+                      title="Edit expense"
                     >
                       <Edit className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
                     </button>
                     <button 
                       onClick={() => handleDeleteClick(expense.id)}
                       className="p-2 md:p-3 hover:bg-red-50 rounded-lg transition-colors"
-                      title="Elimina spesa"
+                      title="Delete expense"
                     >
                       <Trash2 className="w-4 h-4 md:w-5 md:h-5 text-red-600" />
                     </button>
@@ -327,9 +327,9 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
             <div className="text-center py-12">
               <TrendingDown className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-500 text-lg">
-                {searchQuery ? 'Nessuna spesa trovata' : 'Nessuna spesa registrata'}
+                {searchQuery ? 'No expenses found' : 'No expenses recorded'}
               </p>              <p className="text-gray-400 text-sm">
-                {searchQuery ? 'Prova con un altro termine di ricerca' : 'Inizia aggiungendo la tua prima spesa!'}
+                {searchQuery ? 'Try a different search term' : 'Start by adding your first expense!'}
               </p>
             </div>
           )}

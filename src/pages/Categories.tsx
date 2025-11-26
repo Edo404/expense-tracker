@@ -126,7 +126,7 @@ export default function Categories() {
           <FolderOpen className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />
         </div>
         <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">Categories</h1>
-        <p className="text-gray-600 text-sm md:text-lg">Organizza le tue transazioni per categoria</p>
+        <p className="text-gray-600 text-sm md:text-lg">Organize your transactions by category</p>
       </div>      {/* Add Category Buttons */}
       <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
         <button 
@@ -134,14 +134,14 @@ export default function Categories() {
           className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-6 md:px-8 py-3 md:py-4 text-sm md:text-base rounded-xl flex items-center justify-center gap-2 md:gap-3 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
         >
           <PlusCircle className="w-5 h-5 md:w-6 md:h-6" />
-          <span className="font-semibold">Nuova Categoria Spesa</span>
+          <span className="font-semibold">New Expense Category</span>
         </button>
         <button 
           onClick={() => handleOpenAddModal('income')}
           className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white px-6 md:px-8 py-3 md:py-4 text-sm md:text-base rounded-xl flex items-center justify-center gap-2 md:gap-3 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
         >
           <PlusCircle className="w-5 h-5 md:w-6 md:h-6" />
-          <span className="font-semibold">Nuova Categoria Entrata</span>
+          <span className="font-semibold">New Income Category</span>
         </button>
       </div>{/* Categories Grid - Side by Side on Large Screens */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
@@ -149,7 +149,7 @@ export default function Categories() {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
           <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
             <div className="w-1 h-6 md:h-8 bg-red-600 rounded-full"></div>
-            Categorie Spese
+            Expense Categories
           </h2>          <div className="grid grid-cols-1 gap-4">
             {expenseCategories.map((category) => (
               <div key={category.id}>
@@ -197,8 +197,8 @@ export default function Categories() {
                               <FolderOpen className="w-4 h-4 text-white" />
                             </div>
                             <div>
-                              <p className="font-semibold text-gray-700 text-sm">↳ {subcat.name}</p>
-                              <p className="text-xs text-gray-500">{subcat.count} transazioni</p>
+                              <p className="font-semibold text-gray-700 text-sm">↓ {subcat.name}</p>
+                              <p className="text-xs text-gray-500">{subcat.count} transactions</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-3">
@@ -232,7 +232,7 @@ export default function Categories() {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
           <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
             <div className="w-1 h-6 md:h-8 bg-green-600 rounded-full"></div>
-            Categorie Entrate
+            Income Categories
           </h2>          <div className="grid grid-cols-1 gap-4">
             {incomeCategories.map((category) => (
               <div key={category.id}>
@@ -281,8 +281,8 @@ export default function Categories() {
                               <FolderOpen className="w-4 h-4 text-white" />
                             </div>
                             <div>
-                              <p className="font-semibold text-gray-700 text-sm">↳ {subcat.name}</p>
-                              <p className="text-xs text-gray-500">{subcat.count} transazioni</p>
+                              <p className="font-semibold text-gray-700 text-sm">↓ {subcat.name}</p>
+                              <p className="text-xs text-gray-500">{subcat.count} transactions</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-3">
@@ -313,29 +313,29 @@ export default function Categories() {
       </div>      {/* Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl shadow-lg p-6 border border-red-100">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">Categoria Spesa Principale</h3>
+          <h3 className="text-lg font-bold text-gray-800 mb-4">Main Expense Category</h3>
           {mainExpenseCategory ? (
             <>
               <p className="text-3xl font-bold text-red-600">{mainExpenseCategory.name}</p>
               <p className="text-gray-600 mt-2">
-                €{mainExpenseCategory.total.toFixed(2)} • {totalExpenses > 0 ? Math.round((mainExpenseCategory.total / totalExpenses) * 100) : 0}% del totale
+                €{mainExpenseCategory.total.toFixed(2)} • {totalExpenses > 0 ? Math.round((mainExpenseCategory.total / totalExpenses) * 100) : 0}% of total
               </p>
             </>
           ) : (
-            <p className="text-gray-500">Nessuna spesa registrata</p>
+            <p className="text-gray-500">No expenses recorded</p>
           )}
         </div>
         <div className="bg-gradient-to-br from-green-50 to-teal-50 rounded-xl shadow-lg p-6 border border-green-100">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">Categoria Entrata Principale</h3>
+          <h3 className="text-lg font-bold text-gray-800 mb-4">Main Income Category</h3>
           {mainIncomeCategory ? (
             <>
               <p className="text-3xl font-bold text-green-600">{mainIncomeCategory.name}</p>
               <p className="text-gray-600 mt-2">
-                €{mainIncomeCategory.total.toFixed(2)} • {totalIncomes > 0 ? Math.round((mainIncomeCategory.total / totalIncomes) * 100) : 0}% del totale
+                €{mainIncomeCategory.total.toFixed(2)} • {totalIncomes > 0 ? Math.round((mainIncomeCategory.total / totalIncomes) * 100) : 0}% of total
               </p>
             </>
           ) : (
-            <p className="text-gray-500">Nessuna entrata registrata</p>
+            <p className="text-gray-500">No incomes recorded</p>
           )}
         </div>
       </div>      {/* Delete Confirmation Modal */}

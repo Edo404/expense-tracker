@@ -23,8 +23,8 @@ export default function CategorySelect({
   onChange, 
   categories, 
   error, 
-  label = 'Categoria',
-  placeholder = 'Seleziona categoria',
+  label = 'Category',
+  placeholder = 'Select category',
   allowEmpty = false
 }: CategorySelectProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -171,7 +171,7 @@ export default function CategorySelect({
             ) : (
               <div className="p-8 text-center">
                 <FolderOpen className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500">Nessuna categoria disponibile</p>
+                <p className="text-gray-500">No categories available</p>
               </div>
             )}
           </div>

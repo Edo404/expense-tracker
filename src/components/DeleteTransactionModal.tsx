@@ -43,15 +43,15 @@ export default function DeleteTransactionModal({
             <AlertTriangle className="w-6 h-6 text-red-600" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Conferma Eliminazione</h2>
-            <p className="text-sm text-gray-500">Questa azione non può essere annullata</p>
+            <h2 className="text-2xl font-bold text-gray-800">Confirm Deletion</h2>
+            <p className="text-sm text-gray-500">This action cannot be undone</p>
           </div>
         </div>
 
         {/* Message */}
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
           <p className="text-gray-700 mb-3">
-            Sei sicuro di voler eliminare {transactionType === 'expense' ? 'questa spesa' : 'questa entrata'}?
+            Are you sure you want to delete {transactionType === 'expense' ? 'this expense' : 'this income'}?
           </p>
           <div className="bg-white p-3 rounded-lg border border-red-200">
             <p className="font-bold text-gray-800 text-lg">{transactionDescription}</p>
@@ -67,7 +67,7 @@ export default function DeleteTransactionModal({
             onClick={onClose}
             className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
           >
-            Annulla
+            Cancel
           </button>
           <button
             onClick={() => {
@@ -76,7 +76,7 @@ export default function DeleteTransactionModal({
             }}
             className="flex-1 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl"
           >
-            Elimina
+            Delete
           </button>
         </div>
       </div>

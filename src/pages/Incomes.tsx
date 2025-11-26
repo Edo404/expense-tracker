@@ -44,7 +44,7 @@ export default function Incomes({ openAddModal }: IncomesProps) {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' })
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
   }
 
   // Inizializza i filtri con il mese corrente
@@ -124,8 +124,8 @@ export default function Incomes({ openAddModal }: IncomesProps) {
     }
   }
 
-  const handleEditTransaction = (id: string, description: string, amount: number, categoryId: string, date: string) => {
-    updateTransaction(id, { description, amount, categoryId, date })
+  const handleEditTransaction = (id: string, description: string, amount: number, categoryId: string, accountId: string, date: string) => {
+    updateTransaction(id, { description, amount, categoryId, accountId, date })
     console.log(`✅ Entrata modificata: ${description}`)
   }
 
@@ -160,15 +160,15 @@ export default function Incomes({ openAddModal }: IncomesProps) {
           <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-green-600" />
         </div>
         <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">Incomes</h1>
-        <p className="text-gray-600 text-sm md:text-lg">Traccia tutte le tue entrate e guadagni</p>
+        <p className="text-gray-600 text-sm md:text-lg">Track all your income and earnings</p>
       </div>      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Entrate Totali</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Total Income</p>
               <p className="text-2xl md:text-3xl font-bold text-green-600">€{stats.total.toFixed(2)}</p>
-              <p className="text-xs text-gray-400 mt-1">Totale registrato</p>
+              <p className="text-xs text-gray-400 mt-1">Total recorded</p>
             </div>
             <div className="bg-green-100 p-2 md:p-3 rounded-full">
               <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-green-500" />
@@ -179,9 +179,9 @@ export default function Incomes({ openAddModal }: IncomesProps) {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Numero Entrate</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Number of Incomes</p>
               <p className="text-2xl md:text-3xl font-bold text-gray-800">{stats.count}</p>
-              <p className="text-xs text-gray-400 mt-1">Entrate registrate</p>
+              <p className="text-xs text-gray-400 mt-1">Incomes recorded</p>
             </div>
             <div className="bg-blue-100 p-2 md:p-3 rounded-full">
               <Calendar className="w-6 h-6 md:w-8 md:h-8 text-blue-500" />
@@ -192,9 +192,9 @@ export default function Incomes({ openAddModal }: IncomesProps) {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Media Mensile</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Monthly Average</p>
               <p className="text-2xl md:text-3xl font-bold text-teal-600">€{stats.averageMonthly.toFixed(2)}</p>
-              <p className="text-xs text-gray-400 mt-1">Ultimi 6 mesi</p>
+              <p className="text-xs text-gray-400 mt-1">Last 6 months</p>
             </div>
             <div className="bg-teal-100 p-2 md:p-3 rounded-full">
               <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-teal-500" />
@@ -212,7 +212,7 @@ export default function Incomes({ openAddModal }: IncomesProps) {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Cerca entrate..."
+                placeholder="Search incomes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 md:pl-10 pr-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -223,7 +223,7 @@ export default function Incomes({ openAddModal }: IncomesProps) {
               className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base rounded-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg whitespace-nowrap"
             >
               <PlusCircle className="w-4 h-4 md:w-5 md:h-5" />
-              Nuova Entrata
+              New Income
             </button>
           </div>
 
@@ -231,25 +231,25 @@ export default function Incomes({ openAddModal }: IncomesProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {/* Filtro Data Inizio */}
             <DatePicker
-              label="Data Inizio"
+              label="Start Date"
               value={startDate}
               onChange={setStartDate}
             />
 
             {/* Filtro Data Fine */}
             <DatePicker
-              label="Data Fine"
+              label="End Date"
               value={endDate}
               onChange={setEndDate}
             />
 
             {/* Filtro Categoria */}
             <CategorySelect
-              label="Categoria"
+              label="Category"
               categories={categories}
               value={selectedCategory}
               onChange={setSelectedCategory}
-              placeholder="Tutte le categorie"
+              placeholder="All categories"
               allowEmpty
             />
           </div>
@@ -262,7 +262,7 @@ export default function Incomes({ openAddModal }: IncomesProps) {
                 className="text-sm text-gray-600 hover:text-green-600 flex items-center gap-1 px-3 py-1 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <X className="w-4 h-4" />
-                Cancella filtri
+                Clear filters
               </button>
             </div>
           )}
@@ -273,7 +273,7 @@ export default function Incomes({ openAddModal }: IncomesProps) {
       <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
           <div className="w-1 h-6 md:h-8 bg-green-600 rounded-full"></div>
-          Ultime Entrate
+          Recent Incomes
         </h2>          <div className="space-y-4">
           {filteredIncomes.length > 0 ? (
             filteredIncomes.map((income) => (
@@ -307,14 +307,14 @@ export default function Incomes({ openAddModal }: IncomesProps) {
                     <button 
                       onClick={() => handleEditClick(income.id)}
                       className="p-2 md:p-3 hover:bg-gray-100 rounded-lg transition-colors"
-                      title="Modifica entrata"
+                      title="Edit income"
                     >
                       <Edit className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
                     </button>
                     <button 
                       onClick={() => handleDeleteClick(income.id)}
                       className="p-2 md:p-3 hover:bg-green-50 rounded-lg transition-colors"
-                      title="Elimina entrata"
+                      title="Delete income"
                     >
                       <Trash2 className="w-4 h-4 md:w-5 md:h-5 text-green-600" />
                     </button>
@@ -326,9 +326,9 @@ export default function Incomes({ openAddModal }: IncomesProps) {
             <div className="text-center py-12">
               <TrendingUp className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-500 text-lg">
-                {searchQuery ? 'Nessuna entrata trovata' : 'Nessuna entrata registrata'}
+                {searchQuery ? 'No incomes found' : 'No incomes recorded'}
               </p>              <p className="text-gray-400 text-sm">
-                {searchQuery ? 'Prova con un altro termine di ricerca' : 'Inizia aggiungendo la tua prima entrata!'}
+                {searchQuery ? 'Try a different search term' : 'Start by adding your first income!'}
               </p>
             </div>
           )}

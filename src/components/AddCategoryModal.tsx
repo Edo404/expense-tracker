@@ -62,11 +62,11 @@ export default function AddCategoryModal({
     const newErrors: { name?: string; parent?: string } = {}
     
     if (!name.trim()) {
-      newErrors.name = 'Il nome è obbligatorio'
+      newErrors.name = 'Name is required'
     }
     
     if (isSubcategory && !parentId) {
-      newErrors.parent = 'Seleziona una categoria padre'
+      newErrors.parent = 'Select a parent category'
     }
     
     if (Object.keys(newErrors).length > 0) {
@@ -119,9 +119,9 @@ export default function AddCategoryModal({
           </div>
           <div>
             <h2 className="text-2xl font-bold text-gray-800">
-              Nuova Categoria {type === 'expense' ? 'Spesa' : 'Entrata'}
+              New {type === 'expense' ? 'Expense' : 'Income'} Category
             </h2>
-            <p className="text-sm text-gray-500">Crea una nuova categoria personalizzata</p>
+            <p className="text-sm text-gray-500">Create a new custom category</p>
           </div>
         </div>
 
@@ -129,7 +129,7 @@ export default function AddCategoryModal({
           {/* Nome Categoria */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Nome Categoria *
+              Category Name *
             </label>
             <input
               type="text"
@@ -138,7 +138,7 @@ export default function AddCategoryModal({
                 setName(e.target.value)
                 if (errors.name) setErrors({ ...errors, name: undefined })
               }}
-              placeholder="es. Ristoranti, Shopping, Freelance..."
+              placeholder="e.g. Restaurants, Shopping, Freelance..."
               className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all ${
                 errors.name 
                   ? 'border-red-300 focus:border-red-500 focus:ring-red-200' 
@@ -154,8 +154,8 @@ export default function AddCategoryModal({
           <div className="bg-gray-50 p-4 rounded-xl">
             <div className="flex items-center justify-between">
               <div>
-                <span className="font-semibold text-gray-800">È una sotto-categoria</span>
-                <p className="text-xs text-gray-500">Crea una categoria figlio di una esistente</p>
+                <span className="font-semibold text-gray-800">Is a subcategory</span>
+                <p className="text-xs text-gray-500">Create a child category of an existing one</p>
               </div>
               
               {/* Toggle Button */}
@@ -185,7 +185,7 @@ export default function AddCategoryModal({
           {isSubcategory && (
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Categoria Padre *
+                Parent Category *
               </label>
               
               {/* Custom Dropdown */}
@@ -211,7 +211,7 @@ export default function AddCategoryModal({
                         </span>
                       </>
                     ) : (
-                      <span className="text-gray-500">Seleziona una categoria...</span>
+                      <span className="text-gray-500">Select a category...</span>
                     )}
                   </div>
                   <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isParentDropdownOpen ? 'rotate-180' : ''}`} />
@@ -272,7 +272,7 @@ export default function AddCategoryModal({
           {/* Selezione Colore */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Colore
+              Color
             </label>
             <div className="grid grid-cols-6 gap-2">
               {AVAILABLE_COLORS.map((color) => (
@@ -293,18 +293,18 @@ export default function AddCategoryModal({
 
           {/* Anteprima */}
           <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl border-2 border-gray-200">
-            <p className="text-xs font-semibold text-gray-500 mb-2">ANTEPRIMA</p>
+            <p className="text-xs font-semibold text-gray-500 mb-2">PREVIEW</p>
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 ${selectedColor} rounded-lg flex items-center justify-center shadow-md`}>
                 <FolderPlus className="w-5 h-5 text-white" />
               </div>
               <div>
                 <p className="font-bold text-gray-800">
-                  {isSubcategory && '↳ '}{name || 'Nome Categoria'}
+                  {isSubcategory && '↓ '}{name || 'Category Name'}
                 </p>
                 <p className="text-sm text-gray-500">
-                  {type === 'expense' ? 'Categoria Spesa' : 'Categoria Entrata'}
-                  {isSubcategory && parentId && ` • Sotto ${parentCategories.find(c => c.id === parentId)?.name}`}
+                  {type === 'expense' ? 'Expense Category' : 'Income Category'}
+                  {isSubcategory && parentId && ` • Under ${parentCategories.find(c => c.id === parentId)?.name}`}
                 </p>
               </div>
             </div>
@@ -317,7 +317,7 @@ export default function AddCategoryModal({
               onClick={handleClose}
               className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
             >
-              Annulla
+              Cancel
             </button>
             <button
               type="submit"
@@ -327,7 +327,7 @@ export default function AddCategoryModal({
                   : 'bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700'
               } text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl`}
             >
-              Crea Categoria
+              Create Category
             </button>
           </div>
         </form>

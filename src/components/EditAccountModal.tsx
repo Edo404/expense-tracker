@@ -57,12 +57,12 @@ export default function EditAccountModal({
     const newErrors: { name?: string; balance?: string } = {}
     
     if (!name.trim()) {
-      newErrors.name = 'Il nome è obbligatorio'
+      newErrors.name = 'Name is required'
     }
     
     const parsedBalance = parseFloat(balance)
     if (!balance || isNaN(parsedBalance)) {
-      newErrors.balance = 'Inserisci un saldo valido'
+      newErrors.balance = 'Enter a valid balance'
     }
     
     if (Object.keys(newErrors).length > 0) {
@@ -112,8 +112,8 @@ export default function EditAccountModal({
             <Edit className="w-6 h-6 text-blue-600" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Modifica Account</h2>
-            <p className="text-sm text-gray-500">Aggiorna i dettagli dell'account</p>
+            <h2 className="text-2xl font-bold text-gray-800">Edit Account</h2>
+            <p className="text-sm text-gray-500">Update account details</p>
           </div>
         </div>
 
@@ -121,7 +121,7 @@ export default function EditAccountModal({
           {/* Nome Account */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Nome Account *
+              Account Name *
             </label>
             <input
               type="text"
@@ -130,7 +130,7 @@ export default function EditAccountModal({
                 setName(e.target.value)
                 if (errors.name) setErrors({ ...errors, name: undefined })
               }}
-              placeholder="es. PayPal, Cash, Bank Account..."
+              placeholder="e.g. PayPal, Cash, Bank Account..."
               className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all ${
                 errors.name 
                   ? 'border-red-300 focus:border-red-500 focus:ring-red-200' 
@@ -145,7 +145,7 @@ export default function EditAccountModal({
           {/* Saldo */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Saldo (€) *
+              Balance (€) *
             </label>
             <input
               type="number"
@@ -170,7 +170,7 @@ export default function EditAccountModal({
           {/* Selezione Colore */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Colore
+              Color
             </label>
             <div className="grid grid-cols-6 gap-2">
               {AVAILABLE_COLORS.map((color) => (
@@ -191,7 +191,7 @@ export default function EditAccountModal({
 
           {/* Anteprima */}
           <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl border-2 border-gray-200">
-            <p className="text-xs font-semibold text-gray-500 mb-3">ANTEPRIMA</p>
+            <p className="text-xs font-semibold text-gray-500 mb-3">PREVIEW</p>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className={`w-12 h-12 ${selectedColor} rounded-xl flex items-center justify-center shadow-md`}>
@@ -199,15 +199,15 @@ export default function EditAccountModal({
                 </div>
                 <div>
                   <p className="font-bold text-gray-800">
-                    {name || 'Nome Account'}
+                    {name || 'Account Name'}
                   </p>
                   <p className="text-xs text-green-600 font-semibold mt-0.5">
-                    Attivo
+                    Active
                   </p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-xs text-gray-500">Saldo</p>
+                <p className="text-xs text-gray-500">Balance</p>
                 <p className="text-xl font-bold text-purple-600">
                   €{balance ? formatCurrency(balance) : '0.00'}
                 </p>
@@ -222,13 +222,13 @@ export default function EditAccountModal({
               onClick={handleClose}
               className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
             >
-              Annulla
+              Cancel
             </button>
             <button
               type="submit"
               className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl"
             >
-              Salva Modifiche
+              Save Changes
             </button>
           </div>
         </form>

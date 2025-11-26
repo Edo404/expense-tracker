@@ -8,7 +8,7 @@ interface DatePickerProps {
   label?: string
 }
 
-export default function DatePicker({ value, onChange, error, label = 'Data' }: DatePickerProps) {
+export default function DatePicker({ value, onChange, error, label = 'Date' }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const containerRef = useRef<HTMLDivElement>(null)
@@ -92,9 +92,9 @@ export default function DatePicker({ value, onChange, error, label = 'Data' }: D
   }
 
   const formatDisplayDate = (dateString: string) => {
-    if (!dateString) return 'Seleziona una data'
+    if (!dateString) return 'Select a date'
     const date = new Date(dateString)
-    return date.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })
   }
 
   const handleDateClick = (date: Date) => {
@@ -121,9 +121,9 @@ export default function DatePicker({ value, onChange, error, label = 'Data' }: D
     return date.toDateString() === selectedDate.toDateString()
   }
 
-  const monthNames = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 
-                      'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre']
-  const dayNames = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                      'July', 'August', 'September', 'October', 'November', 'December']
+  const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
   return (
     <div ref={containerRef} className="relative">
@@ -215,14 +215,14 @@ export default function DatePicker({ value, onChange, error, label = 'Data' }: D
               }}
               className="flex-1 px-2 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors text-xs"
             >
-              Oggi
+              Today
             </button>
             <button
               type="button"
               onClick={() => setIsOpen(false)}
               className="flex-1 px-2 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors text-xs"
             >
-              Conferma
+              Confirm
             </button>
           </div>
         </div>

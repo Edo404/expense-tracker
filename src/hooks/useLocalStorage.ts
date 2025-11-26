@@ -5,22 +5,22 @@ import type { Category, Transaction, Account } from '../types'
 // Dati iniziali di esempio
 const createInitialCategories = (): Category[] => {
   // Expense categories
-  const alimentari = { id: uuidv4(), name: 'Alimentari', color: 'bg-red-500', type: 'expense' as const }
-  const trasporti = { id: uuidv4(), name: 'Trasporti', color: 'bg-orange-500', type: 'expense' as const }
-  const ristoranti = { id: uuidv4(), name: 'Ristoranti', color: 'bg-yellow-500', type: 'expense' as const }
-  const casa = { id: uuidv4(), name: 'Casa', color: 'bg-blue-500', type: 'expense' as const, hasSubcategories: true }
+  const alimentari = { id: uuidv4(), name: 'Groceries', color: 'bg-red-500', type: 'expense' as const }
+  const trasporti = { id: uuidv4(), name: 'Transportation', color: 'bg-orange-500', type: 'expense' as const }
+  const ristoranti = { id: uuidv4(), name: 'Restaurants', color: 'bg-yellow-500', type: 'expense' as const }
+  const casa = { id: uuidv4(), name: 'Home', color: 'bg-blue-500', type: 'expense' as const, hasSubcategories: true }
   const shopping = { id: uuidv4(), name: 'Shopping', color: 'bg-purple-500', type: 'expense' as const }
-  const intrattenimento = { id: uuidv4(), name: 'Intrattenimento', color: 'bg-pink-500', type: 'expense' as const }
+  const intrattenimento = { id: uuidv4(), name: 'Entertainment', color: 'bg-pink-500', type: 'expense' as const }
   
   // Income categories
-  const lavoro = { id: uuidv4(), name: 'Lavoro', color: 'bg-green-500', type: 'income' as const }
+  const lavoro = { id: uuidv4(), name: 'Work', color: 'bg-green-500', type: 'income' as const }
   const freelance = { id: uuidv4(), name: 'Freelance', color: 'bg-teal-500', type: 'income' as const }
-  const vendite = { id: uuidv4(), name: 'Vendite', color: 'bg-emerald-500', type: 'income' as const, hasSubcategories: true }
+  const vendite = { id: uuidv4(), name: 'Sales', color: 'bg-emerald-500', type: 'income' as const, hasSubcategories: true }
   const extra = { id: uuidv4(), name: 'Extra', color: 'bg-lime-500', type: 'income' as const }
   
   // Subcategories
-  const bollette = { id: uuidv4(), name: 'Bollette', color: 'bg-blue-400', type: 'expense' as const, parentId: casa.id }
-  const strumentiMusicali = { id: uuidv4(), name: 'Strumenti musicali', color: 'bg-emerald-400', type: 'income' as const, parentId: vendite.id }
+  const bollette = { id: uuidv4(), name: 'Bills', color: 'bg-blue-400', type: 'expense' as const, parentId: casa.id }
+  const strumentiMusicali = { id: uuidv4(), name: 'Musical instruments', color: 'bg-emerald-400', type: 'income' as const, parentId: vendite.id }
   
   return [
     alimentari, trasporti, ristoranti, casa, shopping, intrattenimento,

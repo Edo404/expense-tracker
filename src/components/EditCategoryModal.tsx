@@ -62,11 +62,11 @@ export default function EditCategoryModal({
     const newErrors: { name?: string; parent?: string } = {}
     
     if (!name.trim()) {
-      newErrors.name = 'Il nome è obbligatorio'
+      newErrors.name = 'Name is required'
     }
     
     if (isSubcategory && !parentId) {
-      newErrors.parent = 'Seleziona una categoria padre'
+      newErrors.parent = 'Select a parent category'
     }
     
     if (Object.keys(newErrors).length > 0) {
@@ -111,9 +111,9 @@ export default function EditCategoryModal({
           </div>
           <div>
             <h2 className="text-2xl font-bold text-gray-800">
-              Modifica Categoria
+              Edit Category
             </h2>
-            <p className="text-sm text-gray-500">Aggiorna i dettagli della categoria</p>
+            <p className="text-sm text-gray-500">Update category details</p>
           </div>
         </div>
 
@@ -121,7 +121,7 @@ export default function EditCategoryModal({
           {/* Nome Categoria */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Nome Categoria *
+              Category Name *
             </label>
             <input
               type="text"
@@ -130,7 +130,7 @@ export default function EditCategoryModal({
                 setName(e.target.value)
                 if (errors.name) setErrors({ ...errors, name: undefined })
               }}
-              placeholder="es. Ristoranti, Shopping, Freelance..."
+              placeholder="e.g. Restaurants, Shopping, Freelance..."
               className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all ${
                 errors.name 
                   ? 'border-red-300 focus:border-red-500 focus:ring-red-200' 
@@ -158,8 +158,8 @@ export default function EditCategoryModal({
                 className="w-5 h-5 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500"
               />
               <div>
-                <span className="font-semibold text-gray-800">È una sotto-categoria</span>
-                <p className="text-xs text-gray-500">Rendi questa categoria figlia di una esistente</p>
+                <span className="font-semibold text-gray-800">Is a subcategory</span>
+                <p className="text-xs text-gray-500">Make this category a child of an existing one</p>
               </div>
             </label>
           </div>
@@ -168,7 +168,7 @@ export default function EditCategoryModal({
           {isSubcategory && (
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Categoria Padre *
+                Parent Category *
               </label>
               <select
                 value={parentId}
@@ -182,7 +182,7 @@ export default function EditCategoryModal({
                     : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-200'
                 }`}
               >
-                <option value="">Seleziona una categoria...</option>
+                <option value="">Select a category...</option>
                 {parentCategories
                   .filter(cat => cat.id !== category.id) // Non permettere di selezionare se stessa
                   .map((cat) => (
@@ -195,7 +195,7 @@ export default function EditCategoryModal({
                 <p className="mt-1 text-sm text-red-600">{errors.parent}</p>
               )}
               {parentId === category.id && (
-                <p className="mt-1 text-sm text-amber-600">⚠️ Una categoria non può essere figlia di se stessa</p>
+                <p className="mt-1 text-sm text-amber-600">⚠️ A category cannot be a child of itself</p>
               )}
             </div>
           )}
@@ -203,7 +203,7 @@ export default function EditCategoryModal({
           {/* Selezione Colore */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Colore
+              Color
             </label>
             <div className="grid grid-cols-6 gap-2">
               {AVAILABLE_COLORS.map((color) => (
@@ -224,18 +224,18 @@ export default function EditCategoryModal({
 
           {/* Anteprima */}
           <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl border-2 border-gray-200">
-            <p className="text-xs font-semibold text-gray-500 mb-2">ANTEPRIMA</p>
+            <p className="text-xs font-semibold text-gray-500 mb-2">PREVIEW</p>
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 ${selectedColor} rounded-lg flex items-center justify-center shadow-md`}>
                 <FolderEdit className="w-5 h-5 text-white" />
               </div>
               <div>
                 <p className="font-bold text-gray-800">
-                  {isSubcategory && '↳ '}{name || 'Nome Categoria'}
+                  {isSubcategory && '↓ '}{name || 'Category Name'}
                 </p>
                 <p className="text-sm text-gray-500">
-                  {category.type === 'expense' ? 'Categoria Spesa' : 'Categoria Entrata'}
-                  {isSubcategory && parentId && ` • Sotto ${parentCategories.find(c => c.id === parentId)?.name}`}
+                  {category.type === 'expense' ? 'Expense Category' : 'Income Category'}
+                  {isSubcategory && parentId && ` • Under ${parentCategories.find(c => c.id === parentId)?.name}`}
                 </p>
               </div>
             </div>
@@ -248,7 +248,7 @@ export default function EditCategoryModal({
               onClick={handleClose}
               className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
             >
-              Annulla
+              Cancel
             </button>
             <button
               type="submit"
@@ -258,7 +258,7 @@ export default function EditCategoryModal({
                   : 'bg-gradient-to-r from-teal-600 to-green-600 hover:from-teal-700 hover:to-green-700'
               } text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl`}
             >
-              Salva Modifiche
+              Save Changes
             </button>
           </div>
         </form>

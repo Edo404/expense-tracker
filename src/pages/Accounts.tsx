@@ -80,7 +80,7 @@ export default function Accounts() {
           <Wallet className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />
         </div>
         <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">Accounts</h1>
-        <p className="text-gray-600 text-sm md:text-lg">Gestisci i tuoi metodi di pagamento</p>
+        <p className="text-gray-600 text-sm md:text-lg">Manage your payment methods</p>
       </div>
 
       {/* Stats Cards */}
@@ -88,9 +88,9 @@ export default function Accounts() {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Saldo Totale</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Total Balance</p>
               <p className="text-2xl md:text-3xl font-bold text-purple-600">{formatCurrency(totalBalance)}</p>
-              <p className="text-xs text-gray-400 mt-1">Tutti gli account attivi</p>
+              <p className="text-xs text-gray-400 mt-1">All active accounts</p>
             </div>
             <div className="bg-purple-100 p-2 md:p-3 rounded-full">
               <Wallet className="w-6 h-6 md:w-8 md:h-8 text-purple-500" />
@@ -101,9 +101,9 @@ export default function Accounts() {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Account Attivi</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Active Accounts</p>
               <p className="text-2xl md:text-3xl font-bold text-green-600">{activeAccounts}</p>
-              <p className="text-xs text-gray-400 mt-1">In uso</p>
+              <p className="text-xs text-gray-400 mt-1">In use</p>
             </div>
             <div className="bg-green-100 p-2 md:p-3 rounded-full">
               <CreditCard className="w-6 h-6 md:w-8 md:h-8 text-green-500" />
@@ -114,9 +114,9 @@ export default function Accounts() {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Account Inattivi</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Inactive Accounts</p>
               <p className="text-2xl md:text-3xl font-bold text-gray-600">{inactiveAccounts}</p>
-              <p className="text-xs text-gray-400 mt-1">Non utilizzati</p>
+              <p className="text-xs text-gray-400 mt-1">Not used</p>
             </div>
             <div className="bg-gray-100 p-2 md:p-3 rounded-full">
               <Power className="w-6 h-6 md:w-8 md:h-8 text-gray-500" />
@@ -132,7 +132,7 @@ export default function Accounts() {
           className="w-full md:w-auto bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base rounded-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
         >
           <PlusCircle className="w-4 h-4 md:w-5 md:h-5" />
-          Nuovo Account
+          New Account
         </button>
       </div>
 
@@ -140,7 +140,7 @@ export default function Accounts() {
       <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
           <div className="w-1 h-6 md:h-8 bg-purple-600 rounded-full"></div>
-          I Tuoi Account
+          Your Accounts
         </h2>
 
         <div className="space-y-4">
@@ -166,16 +166,16 @@ export default function Accounts() {
                       <h3 className="text-lg md:text-xl font-bold text-gray-800 truncate">{account.name}</h3>
                       {account.isActive ? (
                         <span className="px-2 md:px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
-                          Attivo
+                          Active
                         </span>
                       ) : (
                         <span className="px-2 md:px-3 py-1 bg-gray-200 text-gray-600 text-xs font-semibold rounded-full">
-                          Inattivo
+                          Inactive
                         </span>
                       )}
                     </div>
                     <p className="text-xs md:text-sm text-gray-500 mt-1">
-                      Creato il {new Date(account.createdAt).toLocaleDateString('it-IT')}
+                      Created on {new Date(account.createdAt).toLocaleDateString('en-US')}
                     </p>
                   </div>
                 </div>
@@ -200,7 +200,7 @@ export default function Accounts() {
                           ? 'hover:bg-amber-50' 
                           : 'hover:bg-green-50'
                       }`}
-                      title={account.isActive ? 'Disattiva' : 'Attiva'}
+                      title={account.isActive ? 'Deactivate' : 'Activate'}
                     >
                       <Power className={`w-4 h-4 md:w-5 md:h-5 ${
                         account.isActive ? 'text-amber-600' : 'text-green-600'
@@ -209,14 +209,14 @@ export default function Accounts() {
                     <button 
                       onClick={() => handleEditClick(account.id)}
                       className="p-2 md:p-3 hover:bg-gray-100 rounded-lg transition-colors"
-                      title="Modifica account"
+                      title="Edit account"
                     >
                       <Edit className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
                     </button>
                     <button 
                       onClick={() => handleDeleteClick(account.id)}
                       className="p-2 md:p-3 hover:bg-red-50 rounded-lg transition-colors"
-                      title="Elimina account"
+                      title="Delete account"
                     >
                       <Trash2 className="w-4 h-4 md:w-5 md:h-5 text-red-600" />
                     </button>
@@ -227,8 +227,8 @@ export default function Accounts() {
           ) : (
             <div className="text-center py-12">
               <CreditCard className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 text-lg">Nessun account registrato</p>
-              <p className="text-gray-400 text-sm">Inizia aggiungendo il tuo primo metodo di pagamento!</p>
+              <p className="text-gray-500 text-lg">No accounts registered</p>
+              <p className="text-gray-400 text-sm">Start by adding your first payment method!</p>
             </div>
           )}
         </div>

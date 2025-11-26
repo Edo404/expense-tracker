@@ -56,24 +56,24 @@ export default function EditTransactionModal({
     const newErrors: { description?: string; amount?: string; category?: string; account?: string; date?: string } = {}
     
     if (!description.trim()) {
-      newErrors.description = 'La descrizione è obbligatoria'
+      newErrors.description = 'Description is required'
     }
     
     const parsedAmount = parseFloat(amount)
     if (!amount || isNaN(parsedAmount) || parsedAmount <= 0) {
-      newErrors.amount = 'Inserisci un importo valido maggiore di 0'
+      newErrors.amount = 'Enter a valid amount greater than 0'
     }
     
     if (!categoryId) {
-      newErrors.category = 'Seleziona una categoria'
+      newErrors.category = 'Select a category'
     }
     
     if (!accountId) {
-      newErrors.account = 'Seleziona un account'
+      newErrors.account = 'Select an account'
     }
     
     if (!date) {
-      newErrors.date = 'La data è obbligatoria'
+      newErrors.date = 'Date is required'
     }
     
     if (Object.keys(newErrors).length > 0) {
@@ -118,16 +118,16 @@ export default function EditTransactionModal({
           </div>
           <div>
             <h2 className="text-2xl font-bold text-gray-800">
-              Modifica {transaction.type === 'expense' ? 'Spesa' : 'Entrata'}
+              Edit {transaction.type === 'expense' ? 'Expense' : 'Income'}
             </h2>
-            <p className="text-sm text-gray-500">Aggiorna i dettagli della transazione</p>
+            <p className="text-sm text-gray-500">Update transaction details</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">          {/* Descrizione */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Descrizione *
+              Description *
             </label>
             <input
               type="text"
@@ -136,7 +136,7 @@ export default function EditTransactionModal({
                 setDescription(e.target.value)
                 if (errors.description) setErrors({ ...errors, description: undefined })
               }}
-              placeholder="es. Spesa al supermercato, Stipendio..."
+              placeholder="e.g. Grocery shopping, Salary..."
               className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all ${
                 errors.description 
                   ? 'border-red-300 focus:border-red-500 focus:ring-red-200' 
@@ -170,7 +170,7 @@ export default function EditTransactionModal({
           {/* Importo */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Importo (€) *
+              Amount (€) *
             </label>
             <input
               type="number"
@@ -206,14 +206,14 @@ export default function EditTransactionModal({
 
           {/* Anteprima */}
           <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-xl border-2 border-gray-200">
-            <p className="text-xs font-semibold text-gray-500 mb-2">ANTEPRIMA</p>
+            <p className="text-xs font-semibold text-gray-500 mb-2">PREVIEW</p>
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-bold text-gray-800">
-                  {description || 'Descrizione'}
+                  {description || 'Description'}
                 </p>
                 <p className="text-sm text-gray-500">
-                  {categories.find(c => c.id === categoryId)?.name || 'Categoria'} • {date || 'Data'}
+                  {categories.find(c => c.id === categoryId)?.name || 'Category'} • {date || 'Date'}
                 </p>
               </div>
               <p className={`text-2xl font-bold ${transaction.type === 'expense' ? 'text-red-600' : 'text-green-600'}`}>
@@ -229,7 +229,7 @@ export default function EditTransactionModal({
               onClick={handleClose}
               className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
             >
-              Annulla
+              Cancel
             </button>
             <button
               type="submit"
@@ -239,7 +239,7 @@ export default function EditTransactionModal({
                   : 'bg-gradient-to-r from-teal-600 to-green-600 hover:from-teal-700 hover:to-green-700'
               } text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl`}
             >
-              Salva Modifiche
+              Save Changes
             </button>
           </div>
         </form>

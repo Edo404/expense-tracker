@@ -53,24 +53,24 @@ export default function DeleteAccountModal({
             <AlertTriangle className="w-6 h-6 text-red-600" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Elimina Account</h2>
-            <p className="text-sm text-gray-500">Questa azione non può essere annullata</p>
+            <h2 className="text-2xl font-bold text-gray-800">Delete Account</h2>
+            <p className="text-sm text-gray-500">This action cannot be undone</p>
           </div>
         </div>
 
         {/* Warning Message */}
         <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-6">
           <p className="text-gray-700 mb-3">
-            Sei sicuro di voler eliminare l'account <span className="font-bold text-gray-900">"{accountName}"</span>?
+            Are you sure you want to delete the account <span className="font-bold text-gray-900">"{accountName}"</span>?
           </p>
           <div className="bg-white rounded-lg p-3 border border-red-200">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-600">Saldo corrente:</span>
+              <span className="text-sm font-medium text-gray-600">Current balance:</span>
               <span className="text-lg font-bold text-red-600">{formatCurrency(accountBalance)}</span>
             </div>
           </div>
           <p className="text-sm text-gray-600 mt-3">
-            ⚠️ L'account e il suo saldo verranno eliminati permanentemente.
+            ⚠️ The account and its balance will be permanently deleted.
           </p>
         </div>
 
@@ -80,14 +80,14 @@ export default function DeleteAccountModal({
             onClick={onClose}
             className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
           >
-            Annulla
+            Cancel
           </button>
           <button
             onClick={handleConfirm}
             className="flex-1 px-6 py-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
           >
             <Trash2 className="w-5 h-5" />
-            Elimina
+            Delete
           </button>
         </div>
       </div>

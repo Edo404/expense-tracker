@@ -30,7 +30,7 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' })
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
   }
 
   // Calcola l'andamento del portafoglio nel tempo
@@ -59,7 +59,7 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
     Object.entries(groupedByDate).forEach(([date, values]) => {
       balance += values.incomes - values.expenses
       data.push({
-        date: new Date(date).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' }),
+        date: new Date(date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' }),
         saldo: parseFloat(balance.toFixed(2)),
         entrate: parseFloat(values.incomes.toFixed(2)),
         spese: parseFloat(values.expenses.toFixed(2))
@@ -124,15 +124,15 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
           <Wallet className="w-6 h-6 md:w-8 md:h-8 text-indigo-600" />
         </div>
         <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-2">Home</h1>
-        <p className="text-gray-600 text-sm md:text-lg">Benvenuto nel tuo Expense Tracker personale</p>
+        <p className="text-gray-600 text-sm md:text-lg">Welcome to your personal Expense Tracker</p>
       </div>      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Totale Spese</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Total Expenses</p>
               <p className="text-2xl md:text-3xl font-bold text-red-600">€{stats.totalExpenses.toFixed(2)}</p>
-              <p className="text-xs text-gray-400 mt-1">{stats.expenseCount} transazioni</p>
+              <p className="text-xs text-gray-400 mt-1">{stats.expenseCount} transactions</p>
             </div>
             <div className="bg-red-100 p-2 md:p-3 rounded-full">
               <TrendingDown className="w-6 h-6 md:w-8 md:h-8 text-red-500" />
@@ -143,9 +143,9 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Entrate</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Incomes</p>
               <p className="text-2xl md:text-3xl font-bold text-green-600">€{stats.totalIncomes.toFixed(2)}</p>
-              <p className="text-xs text-gray-400 mt-1">{stats.incomeCount} transazioni</p>
+              <p className="text-xs text-gray-400 mt-1">{stats.incomeCount} transactions</p>
             </div>
             <div className="bg-green-100 p-2 md:p-3 rounded-full">
               <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-green-500" />
@@ -156,11 +156,11 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Bilancio</p>
+              <p className="text-gray-500 text-xs md:text-sm font-medium mb-1">Balance</p>
               <p className={`text-2xl md:text-3xl font-bold ${stats.balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
                 €{stats.balance.toFixed(2)}
               </p>
-              <p className="text-xs text-gray-400 mt-1">Saldo disponibile</p>
+              <p className="text-xs text-gray-400 mt-1">Available balance</p>
             </div>
             <div className="bg-blue-100 p-2 md:p-3 rounded-full">
               <Wallet className="w-6 h-6 md:w-8 md:h-8 text-blue-500" />
@@ -189,29 +189,29 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
       <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
           <div className="w-1 h-6 md:h-8 bg-indigo-600 rounded-full"></div>
-          Riepilogo Rapido
+          Quick Summary
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="border-l-4 border-red-500 pl-4">
-            <p className="text-gray-500 text-sm mb-1">Spesa più grande</p>
+            <p className="text-gray-500 text-sm mb-1">Largest Expense</p>
             {largestExpense ? (
               <>
                 <p className="text-xl font-bold text-gray-800">€{largestExpense.amount.toFixed(2)}</p>
                 <p className="text-sm text-gray-600">{largestExpense.description} - {formatDate(largestExpense.date)}</p>
               </>
             ) : (
-              <p className="text-sm text-gray-500">Nessuna spesa registrata</p>
+              <p className="text-sm text-gray-500">No expenses recorded</p>
             )}
           </div>
           <div className="border-l-4 border-green-500 pl-4">
-            <p className="text-gray-500 text-sm mb-1">Entrata più grande</p>
+            <p className="text-gray-500 text-sm mb-1">Largest Income</p>
             {largestIncome ? (
               <>
                 <p className="text-xl font-bold text-gray-800">€{largestIncome.amount.toFixed(2)}</p>
                 <p className="text-sm text-gray-600">{largestIncome.description} - {formatDate(largestIncome.date)}</p>
               </>
             ) : (
-              <p className="text-sm text-gray-500">Nessuna entrata registrata</p>
+              <p className="text-sm text-gray-500">No incomes recorded</p>
             )}
           </div>
         </div>
@@ -221,7 +221,7 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
       <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
           <div className="w-1 h-6 md:h-8 bg-indigo-600 rounded-full"></div>
-          Andamento Portafoglio
+          Portfolio Trend
         </h2>
         {portfolioData.length > 0 ? (
           <ResponsiveContainer width="100%" height={400}>
@@ -257,7 +257,7 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
                 strokeWidth={3}
                 dot={{ fill: '#6366f1', r: 4 }}
                 activeDot={{ r: 6 }}
-                name="Saldo"
+                name="Balance"
               />
               <Line 
                 type="monotone" 
@@ -265,7 +265,7 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
                 stroke="#10b981" 
                 strokeWidth={2}
                 dot={{ fill: '#10b981', r: 3 }}
-                name="Entrate"
+                name="Incomes"
               />
               <Line 
                 type="monotone" 
@@ -273,15 +273,15 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
                 stroke="#ef4444" 
                 strokeWidth={2}
                 dot={{ fill: '#ef4444', r: 3 }}
-                name="Spese"
+                name="Expenses"
               />
             </LineChart>
           </ResponsiveContainer>
         ) : (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">📊</div>
-            <p className="text-gray-500 text-lg">Nessun dato disponibile</p>
-            <p className="text-gray-400 text-sm">Aggiungi transazioni per visualizzare il grafico</p>
+            <p className="text-gray-500 text-lg">No data available</p>
+            <p className="text-gray-400 text-sm">Add transactions to view the chart</p>
           </div>
         )}
       </div>
@@ -292,7 +292,7 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
           <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
             <div className="w-1 h-6 md:h-8 bg-red-600 rounded-full"></div>
-            Distribuzione Spese
+            Expenses Distribution
           </h2>
           {expensesByCategoryData.length > 0 ? (
             <>
@@ -398,8 +398,8 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
           ) : (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">📊</div>
-              <p className="text-gray-500 text-lg">Nessuna spesa registrata</p>
-              <p className="text-gray-400 text-sm">Aggiungi spese per visualizzare il grafico</p>
+              <p className="text-gray-500 text-lg">No expenses recorded</p>
+              <p className="text-gray-400 text-sm">Add expenses to view the chart</p>
             </div>
           )}
         </div>
@@ -408,7 +408,7 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
           <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
             <div className="w-1 h-6 md:h-8 bg-green-600 rounded-full"></div>
-            Distribuzione Entrate
+            Incomes Distribution
           </h2>
           {incomesByCategoryData.length > 0 ? (
             <>
@@ -514,8 +514,8 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
           ) : (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">📊</div>
-              <p className="text-gray-500 text-lg">Nessuna entrata registrata</p>
-              <p className="text-gray-400 text-sm">Aggiungi entrate per visualizzare il grafico</p>
+              <p className="text-gray-500 text-lg">No incomes recorded</p>
+              <p className="text-gray-400 text-sm">Add incomes to view the chart</p>
             </div>
           )}
         </div>
