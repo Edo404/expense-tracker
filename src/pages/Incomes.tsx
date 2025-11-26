@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { PlusCircle, TrendingUp, Search, Calendar, Edit, Trash2, X } from 'lucide-react'
 import { useData } from '../context/DataContext'
 import DeleteTransactionModal from '../components/DeleteTransactionModal'
 import EditTransactionModal from '../components/EditTransactionModal'
 import AddTransactionModal from '../components/AddTransactionModal'
+import DatePicker from '../components/DatePicker'
+import CategorySelect from '../components/CategorySelect'
 
 export default function Incomes() {
   const { getTransactionsByType, deleteTransaction, updateTransaction, getCategoriesByType, addTransaction, accounts } = useData()
@@ -42,13 +44,12 @@ export default function Incomes() {
   }
 
   // Inizializza i filtri con il mese corrente
-  useMemo(() => {
+  useEffect(() => {
     const now = new Date()
     const firstDay = new Date(now.getFullYear(), now.getMonth(), 1)
     const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0)
-    
-    if (!startDate) setStartDate(firstDay.toISOString().split('T')[0])
-    if (!endDate) setEndDate(lastDay.toISOString().split('T')[0])
+    setStartDate(firstDay.toISOString().split('T')[0])
+    setEndDate(lastDay.toISOString().split('T')[0])
   }, [])
 
   // Filtra per data, categoria e ricerca testuale
@@ -218,49 +219,28 @@ export default function Incomes() {
           {/* Seconda riga: Filtri */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {/* Filtro Data Inizio */}
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Data Inizio</label>
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
-            </div>
+            <DatePicker
+              label="Data Inizio"
+              value={startDate}
+              onChange={setStartDate}
+            />
 
             {/* Filtro Data Fine */}
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Data Fine</label>
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
-            </div>
+            <DatePicker
+              label="Data Fine"
+              value={endDate}
+              onChange={setEndDate}
+            />
 
             {/* Filtro Categoria */}
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Categoria</label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
-              >
-                <option value="">Tutte le categorie</option>
-                {categories.map(category => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <CategorySelect
+              label="Categoria"
+              categories={categories}
+              value={selectedCategory}
+              onChange={setSelectedCategory}
+              placeholder="Tutte le categorie"
+              allowEmpty
+            />
           </div>
 
           {/* Bottone Cancella Filtri */}

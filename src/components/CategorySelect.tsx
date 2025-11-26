@@ -14,6 +14,8 @@ interface CategorySelectProps {
   categories: Category[]
   error?: string
   label?: string
+  placeholder?: string
+  allowEmpty?: boolean
 }
 
 export default function CategorySelect({ 
@@ -21,7 +23,9 @@ export default function CategorySelect({
   onChange, 
   categories, 
   error, 
-  label = 'Categoria' 
+  label = 'Categoria',
+  placeholder = 'Seleziona categoria',
+  allowEmpty = false
 }: CategorySelectProps) {
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -62,18 +66,18 @@ export default function CategorySelect({
 
   return (
     <div ref={containerRef} className="relative">
-      <label className="block text-sm font-semibold text-gray-700 mb-2">
-        {label} *
+      <label className="block text-xs font-medium text-gray-700 mb-1">
+        {label}
       </label>
       
       {/* Select Display */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all text-left flex items-center justify-between gap-3
+        className={`w-full px-4 py-2.5 md:py-3 border rounded-lg focus:outline-none focus:ring-2 transition-all text-left flex items-center justify-between gap-3
           ${error 
             ? 'border-red-300 focus:border-red-500 focus:ring-red-200' 
-            : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-200 hover:border-gray-400'
+            : 'border-gray-300 focus:border-gray-300 focus:ring-indigo-200 hover:border-gray-400'
           }`}
       >
         <div className="flex items-center gap-3 flex-1">
@@ -89,7 +93,7 @@ export default function CategorySelect({
               <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
                 <FolderOpen className="w-4 h-4 text-gray-400" />
               </div>
-              <span className="text-gray-400">Seleziona una categoria...</span>
+              <span className="text-gray-400">{placeholder}</span>
             </>
           )}
         </div>
@@ -98,10 +102,37 @@ export default function CategorySelect({
       
       {error && (
         <p className="mt-1 text-sm text-red-600">{error}</p>
-      )}      {/* Dropdown */}
+      )}
+
+      {/* Dropdown */}
       {isOpen && (
         <div className="absolute z-50 mt-2 w-full bg-white rounded-2xl shadow-2xl border-2 border-gray-200 max-h-80 overflow-y-auto animate-in fade-in zoom-in duration-200">
           <div className="p-2">
+            {allowEmpty && (
+              <button
+                type="button"
+                onClick={() => handleSelect('')}
+                className={`
+                  flex items-center gap-2 p-2 rounded-lg transition-all text-left w-full
+                  ${value === '' 
+                    ? 'bg-indigo-50 border border-indigo-500' 
+                    : 'hover:bg-gray-50 border border-transparent'
+                  }
+                `}
+              >
+                <div className="w-6 h-6 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
+                  <FolderOpen className="w-3 h-3 text-gray-400" />
+                </div>
+                <div className="flex-1">
+                  <p className={`text-sm ${value === '' ? 'text-indigo-700' : 'text-gray-800'}`}>
+                    {placeholder}
+                  </p>
+                </div>
+                {value === '' && (
+                  <Check className="w-4 h-4 text-indigo-600 flex-shrink-0" />
+                )}
+              </button>
+            )}
             {organizedCategories().length > 0 ? (
               organizedCategories().map(({ category, isChild }) => {
                 const isSelected = value === category.id
@@ -111,36 +142,28 @@ export default function CategorySelect({
                     type="button"
                     onClick={() => handleSelect(category.id)}
                     className={`
-                      flex items-center gap-3 p-3 rounded-xl transition-all text-left
-                      ${isChild ? 'ml-6 w-[calc(100%-1.5rem)]' : 'w-full'}
+                      flex items-center gap-2 p-2 rounded-lg transition-all text-left
+                      ${isChild ? 'ml-4 w-[calc(100%-1rem)]' : 'w-full'}
                       ${isSelected 
-                        ? 'bg-indigo-50 border-2 border-indigo-500 shadow-sm' 
-                        : 'hover:bg-gray-50 border-2 border-transparent'
+                        ? 'bg-indigo-50 border border-indigo-500' 
+                        : 'hover:bg-gray-50 border border-transparent'
                       }
                     `}
                   >{/* Icon */}
-                    <div className={`w-10 h-10 ${category.color || 'bg-gray-400'} rounded-lg flex items-center justify-center flex-shrink-0 ${isChild ? 'w-8 h-8' : ''}`}>
-                      <FolderOpen className={`${isChild ? 'w-4 h-4' : 'w-5 h-5'} text-white`} />
+                    <div className={`${isChild ? 'w-5 h-5' : 'w-6 h-6'} ${category.color || 'bg-gray-400'} rounded flex items-center justify-center flex-shrink-0`}>
+                      <FolderOpen className={`${isChild ? 'w-3 h-3' : 'w-3 h-3'} text-white`} />
                     </div>
                     
                     {/* Name */}
-                    <div className={`flex-1 ${isChild ? 'min-w-0' : ''}`}>
-                      <p className={`font-semibold ${isChild ? 'text-sm truncate' : 'text-base'} ${isSelected ? 'text-indigo-700' : 'text-gray-800'}`}>
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-sm ${isChild ? 'truncate' : ''} ${isSelected ? 'text-indigo-700' : 'text-gray-800'}`}>
                         {isChild && '↳ '}{category.name}
                       </p>
-                      {!isChild && (
-                        <p className="text-xs text-gray-500 mt-0.5">
-                          {categories.filter(c => c.parentId === category.id).length > 0 
-                            ? `${categories.filter(c => c.parentId === category.id).length} sottocategorie`
-                            : 'Categoria principale'
-                          }
-                        </p>
-                      )}
                     </div>
                     
                     {/* Check Icon */}
                     {isSelected && (
-                      <Check className="w-5 h-5 text-indigo-600 flex-shrink-0" />
+                      <Check className="w-4 h-4 text-indigo-600 flex-shrink-0" />
                     )}
                   </button>
                 )

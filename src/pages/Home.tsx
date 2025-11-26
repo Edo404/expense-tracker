@@ -1,11 +1,13 @@
 import { useMemo } from 'react'
 import { PlusCircle, TrendingDown, TrendingUp, Wallet } from 'lucide-react'
 import { useData } from '../context/DataContext'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 
 export default function Home() {
-  const { getStats, transactions } = useData()
+  const { getStats, transactions, getCategoriesByType } = useData()
   const stats = getStats()
+  const expenseCategories = getCategoriesByType('expense')
+  const incomeCategories = getCategoriesByType('income')
 
   // Trova la spesa e l'entrata più grande
   const largestExpense = useMemo(() => {
@@ -60,6 +62,53 @@ export default function Home() {
     
     return data
   }, [transactions])
+
+  // Colori per i grafici a torta
+  const COLORS = ['#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e', '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9', '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899']
+
+  // Dati per grafico a torta spese per categoria
+  const expensesByCategoryData = useMemo(() => {
+    const expenses = transactions.filter(t => t.type === 'expense')
+    const categoryTotals: Record<string, { name: string; value: number; color?: string }> = {}
+    
+    expenses.forEach(expense => {
+      const category = expenseCategories.find(c => c.id === expense.categoryId)
+      if (category) {
+        if (!categoryTotals[category.id]) {
+          categoryTotals[category.id] = {
+            name: category.name,
+            value: 0,
+            color: category.color
+          }
+        }
+        categoryTotals[category.id].value += expense.amount
+      }
+    })
+    
+    return Object.values(categoryTotals).sort((a, b) => b.value - a.value)
+  }, [transactions, expenseCategories])
+
+  // Dati per grafico a torta entrate per categoria
+  const incomesByCategoryData = useMemo(() => {
+    const incomes = transactions.filter(t => t.type === 'income')
+    const categoryTotals: Record<string, { name: string; value: number; color?: string }> = {}
+    
+    incomes.forEach(income => {
+      const category = incomeCategories.find(c => c.id === income.categoryId)
+      if (category) {
+        if (!categoryTotals[category.id]) {
+          categoryTotals[category.id] = {
+            name: category.name,
+            value: 0,
+            color: category.color
+          }
+        }
+        categoryTotals[category.id].value += income.amount
+      }
+    })
+    
+    return Object.values(categoryTotals).sort((a, b) => b.value - a.value)
+  }, [transactions, incomeCategories])
 
   return (
     <div className="space-y-8">
@@ -219,6 +268,241 @@ export default function Home() {
             <p className="text-gray-400 text-sm">Aggiungi transazioni per visualizzare il grafico</p>
           </div>
         )}
+      </div>
+
+      {/* Pie Charts: Expenses and Incomes by Category */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        {/* Expenses by Category */}
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
+            <div className="w-1 h-6 md:h-8 bg-red-600 rounded-full"></div>
+            Distribuzione Spese
+          </h2>
+          {expensesByCategoryData.length > 0 ? (
+            <>
+              <ResponsiveContainer width="100%" height={350}>
+                <PieChart>
+                  <Pie
+                    data={expensesByCategoryData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ percent }) => {
+                      const percentage = ((percent || 0) * 100).toFixed(0)
+                      return percentage !== '0' ? `${percentage}%` : ''
+                    }}
+                    outerRadius={100}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {expensesByCategoryData.map((entry, index) => {
+                      // Converti il colore Tailwind in hex
+                      const colorMap: Record<string, string> = {
+                        'bg-red-500': '#ef4444',
+                        'bg-orange-500': '#f97316',
+                        'bg-amber-500': '#f59e0b',
+                        'bg-yellow-500': '#eab308',
+                        'bg-lime-500': '#84cc16',
+                        'bg-green-500': '#22c55e',
+                        'bg-emerald-500': '#10b981',
+                        'bg-teal-500': '#14b8a6',
+                        'bg-cyan-500': '#06b6d4',
+                        'bg-sky-500': '#0ea5e9',
+                        'bg-blue-500': '#3b82f6',
+                        'bg-blue-400': '#60a5fa',
+                        'bg-indigo-500': '#6366f1',
+                        'bg-violet-500': '#8b5cf6',
+                        'bg-purple-500': '#a855f7',
+                        'bg-fuchsia-500': '#d946ef',
+                        'bg-pink-500': '#ec4899',
+                      }
+                      const color = entry.color ? colorMap[entry.color] || COLORS[index % COLORS.length] : COLORS[index % COLORS.length]
+                      return (
+                        <Cell key={`cell-${index}`} fill={color} />
+                      )
+                    })}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'white', 
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '12px',
+                      boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                      padding: '12px'
+                    }}
+                    formatter={(value: number, name: string) => [
+                      `€${value.toFixed(2)}`,
+                      <span style={{ fontWeight: 'bold', color: '#374151' }}>{name}</span>
+                    ]}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="mt-4 space-y-2">
+                {expensesByCategoryData.map((entry, index) => {
+                  const colorMap: Record<string, string> = {
+                    'bg-red-500': '#ef4444',
+                    'bg-orange-500': '#f97316',
+                    'bg-amber-500': '#f59e0b',
+                    'bg-yellow-500': '#eab308',
+                    'bg-lime-500': '#84cc16',
+                    'bg-green-500': '#22c55e',
+                    'bg-emerald-500': '#10b981',
+                    'bg-teal-500': '#14b8a6',
+                    'bg-cyan-500': '#06b6d4',
+                    'bg-sky-500': '#0ea5e9',
+                    'bg-blue-500': '#3b82f6',
+                    'bg-blue-400': '#60a5fa',
+                    'bg-indigo-500': '#6366f1',
+                    'bg-violet-500': '#8b5cf6',
+                    'bg-purple-500': '#a855f7',
+                    'bg-fuchsia-500': '#d946ef',
+                    'bg-pink-500': '#ec4899',
+                  }
+                  const color = entry.color ? colorMap[entry.color] || COLORS[index % COLORS.length] : COLORS[index % COLORS.length]
+                  const total = expensesByCategoryData.reduce((sum, e) => sum + e.value, 0)
+                  const percentage = ((entry.value / total) * 100).toFixed(1)
+                  return (
+                    <div key={index} className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2">
+                        <div 
+                          className="w-4 h-4 rounded"
+                          style={{ backgroundColor: color }}
+                        ></div>
+                        <span className="text-gray-700 font-medium">{entry.name}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-gray-500">{percentage}%</span>
+                        <span className="text-gray-800 font-semibold">€{entry.value.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">📊</div>
+              <p className="text-gray-500 text-lg">Nessuna spesa registrata</p>
+              <p className="text-gray-400 text-sm">Aggiungi spese per visualizzare il grafico</p>
+            </div>
+          )}
+        </div>
+
+        {/* Incomes by Category */}
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
+            <div className="w-1 h-6 md:h-8 bg-green-600 rounded-full"></div>
+            Distribuzione Entrate
+          </h2>
+          {incomesByCategoryData.length > 0 ? (
+            <>
+              <ResponsiveContainer width="100%" height={350}>
+                <PieChart>
+                  <Pie
+                    data={incomesByCategoryData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ percent }) => {
+                      const percentage = ((percent || 0) * 100).toFixed(0)
+                      return percentage !== '0' ? `${percentage}%` : ''
+                    }}
+                    outerRadius={100}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {incomesByCategoryData.map((entry, index) => {
+                      // Converti il colore Tailwind in hex
+                      const colorMap: Record<string, string> = {
+                        'bg-red-500': '#ef4444',
+                        'bg-orange-500': '#f97316',
+                        'bg-amber-500': '#f59e0b',
+                        'bg-yellow-500': '#eab308',
+                        'bg-lime-500': '#84cc16',
+                        'bg-green-500': '#22c55e',
+                        'bg-emerald-500': '#10b981',
+                        'bg-emerald-400': '#34d399',
+                        'bg-teal-500': '#14b8a6',
+                        'bg-cyan-500': '#06b6d4',
+                        'bg-sky-500': '#0ea5e9',
+                        'bg-blue-500': '#3b82f6',
+                        'bg-indigo-500': '#6366f1',
+                        'bg-violet-500': '#8b5cf6',
+                        'bg-purple-500': '#a855f7',
+                        'bg-fuchsia-500': '#d946ef',
+                        'bg-pink-500': '#ec4899',
+                      }
+                      const color = entry.color ? colorMap[entry.color] || COLORS[index % COLORS.length] : COLORS[index % COLORS.length]
+                      return (
+                        <Cell key={`cell-${index}`} fill={color} />
+                      )
+                    })}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'white', 
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '12px',
+                      boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                      padding: '12px'
+                    }}
+                    formatter={(value: number, name: string) => [
+                      `€${value.toFixed(2)}`,
+                      <span style={{ fontWeight: 'bold', color: '#374151' }}>{name}</span>
+                    ]}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="mt-4 space-y-2">
+                {incomesByCategoryData.map((entry, index) => {
+                  const colorMap: Record<string, string> = {
+                    'bg-red-500': '#ef4444',
+                    'bg-orange-500': '#f97316',
+                    'bg-amber-500': '#f59e0b',
+                    'bg-yellow-500': '#eab308',
+                    'bg-lime-500': '#84cc16',
+                    'bg-green-500': '#22c55e',
+                    'bg-emerald-500': '#10b981',
+                    'bg-emerald-400': '#34d399',
+                    'bg-teal-500': '#14b8a6',
+                    'bg-cyan-500': '#06b6d4',
+                    'bg-sky-500': '#0ea5e9',
+                    'bg-blue-500': '#3b82f6',
+                    'bg-indigo-500': '#6366f1',
+                    'bg-violet-500': '#8b5cf6',
+                    'bg-purple-500': '#a855f7',
+                    'bg-fuchsia-500': '#d946ef',
+                    'bg-pink-500': '#ec4899',
+                  }
+                  const color = entry.color ? colorMap[entry.color] || COLORS[index % COLORS.length] : COLORS[index % COLORS.length]
+                  const total = incomesByCategoryData.reduce((sum, e) => sum + e.value, 0)
+                  const percentage = ((entry.value / total) * 100).toFixed(1)
+                  return (
+                    <div key={index} className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2">
+                        <div 
+                          className="w-4 h-4 rounded"
+                          style={{ backgroundColor: color }}
+                        ></div>
+                        <span className="text-gray-700 font-medium">{entry.name}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-gray-500">{percentage}%</span>
+                        <span className="text-gray-800 font-semibold">€{entry.value.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">📊</div>
+              <p className="text-gray-500 text-lg">Nessuna entrata registrata</p>
+              <p className="text-gray-400 text-sm">Aggiungi entrate per visualizzare il grafico</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
