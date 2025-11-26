@@ -7,7 +7,11 @@ import AddTransactionModal from '../components/AddTransactionModal'
 import DatePicker from '../components/DatePicker'
 import CategorySelect from '../components/CategorySelect'
 
-export default function Incomes() {
+interface IncomesProps {
+  openAddModal?: boolean
+}
+
+export default function Incomes({ openAddModal }: IncomesProps) {
   const { getTransactionsByType, deleteTransaction, updateTransaction, getCategoriesByType, addTransaction, accounts } = useData()
   const incomes = getTransactionsByType('income')
   const categories = getCategoriesByType('income')
@@ -51,6 +55,13 @@ export default function Incomes() {
     setStartDate(firstDay.toISOString().split('T')[0])
     setEndDate(lastDay.toISOString().split('T')[0])
   }, [])
+
+  // Apri automaticamente il modal se richiesto
+  useEffect(() => {
+    if (openAddModal) {
+      setIsAddModalOpen(true)
+    }
+  }, [openAddModal])
 
   // Filtra per data, categoria e ricerca testuale
   const filteredIncomes = useMemo(() => {

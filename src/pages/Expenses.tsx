@@ -7,7 +7,11 @@ import AddTransactionModal from '../components/AddTransactionModal'
 import CategorySelect from '../components/CategorySelect'
 import DatePicker from '../components/DatePicker'
 
-export default function Expenses() {
+interface ExpensesProps {
+  openAddModal?: boolean
+}
+
+export default function Expenses({ openAddModal }: ExpensesProps) {
   const { getTransactionsByType, deleteTransaction, updateTransaction, getCategoriesByType, addTransaction, accounts } = useData()
   const expenses = getTransactionsByType('expense')
   const categories = getCategoriesByType('expense')
@@ -52,6 +56,13 @@ export default function Expenses() {
     setStartDate(firstDay.toISOString().split('T')[0])
     setEndDate(lastDay.toISOString().split('T')[0])
   }, [])
+
+  // Apri automaticamente il modal se richiesto
+  useEffect(() => {
+    if (openAddModal) {
+      setIsAddModalOpen(true)
+    }
+  }, [openAddModal])
 
   // Filtra per data, categoria e ricerca testuale
   const filteredExpenses = useMemo(() => {

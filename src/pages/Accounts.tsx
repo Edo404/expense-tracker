@@ -126,7 +126,7 @@ export default function Accounts() {
       </div>
 
       {/* Add Account Button */}
-      <div className="flex justify-center md:justify-end">
+      <div className="flex justify-center md:justify-start">
         <button 
           onClick={() => setIsAddModalOpen(true)}
           className="w-full md:w-auto bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base rounded-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"

@@ -3,7 +3,13 @@ import { PlusCircle, TrendingDown, TrendingUp, Wallet } from 'lucide-react'
 import { useData } from '../context/DataContext'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 
-export default function Home() {
+interface HomeProps {
+  setActiveTab?: (tab: string) => void
+  onAddExpense?: () => void
+  onAddIncome?: () => void
+}
+
+export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
   const { getStats, transactions, getCategoriesByType } = useData()
   const stats = getStats()
   const expenseCategories = getCategoriesByType('expense')
@@ -163,11 +169,21 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Add Transaction Button */}
-      <div className="text-center">
-        <button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 md:px-8 py-3 md:py-4 text-sm md:text-base rounded-xl flex items-center gap-2 md:gap-3 mx-auto transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
-          <PlusCircle className="w-6 h-6" />
-          <span className="font-semibold text-lg">Aggiungi Transazione</span>
+      {/* Add Transaction Buttons */}
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center">
+        <button 
+          onClick={() => onAddExpense?.()}
+          className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-6 md:px-8 py-3 md:py-4 text-sm md:text-base rounded-xl flex items-center justify-center gap-2 md:gap-3 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+        >
+          <PlusCircle className="w-5 h-5 md:w-6 md:h-6" />
+          <span className="font-semibold text-base md:text-lg">Add Expense</span>
+        </button>
+        <button 
+          onClick={() => onAddIncome?.()}
+          className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white px-6 md:px-8 py-3 md:py-4 text-sm md:text-base rounded-xl flex items-center justify-center gap-2 md:gap-3 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+        >
+          <PlusCircle className="w-5 h-5 md:w-6 md:h-6" />
+          <span className="font-semibold text-base md:text-lg">Add Income</span>
         </button>
       </div>      {/* Quick Summary */}
       <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
