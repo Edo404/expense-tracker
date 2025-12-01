@@ -50,11 +50,15 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
   // Inizializza i filtri con il mese corrente
   useEffect(() => {
     const now = new Date()
-    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1)
-    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+    const year = now.getFullYear()
+    const month = now.getMonth()
     
-    setStartDate(firstDay.toISOString().split('T')[0])
-    setEndDate(lastDay.toISOString().split('T')[0])
+    const firstDay = `${year}-${String(month + 1).padStart(2, '0')}-01`
+    const lastDay = new Date(year, month + 1, 0)
+    const lastDayFormatted = `${year}-${String(month + 1).padStart(2, '0')}-${String(lastDay.getDate()).padStart(2, '0')}`
+    
+    setStartDate(firstDay)
+    setEndDate(lastDayFormatted)
   }, [])
 
   // Apri automaticamente il modal se richiesto
@@ -101,10 +105,15 @@ export default function Expenses({ openAddModal }: ExpensesProps) {
     setSearchQuery('')
     setSelectedCategory('')
     const now = new Date()
-    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1)
-    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0)
-    setStartDate(firstDay.toISOString().split('T')[0])
-    setEndDate(lastDay.toISOString().split('T')[0])
+    const year = now.getFullYear()
+    const month = now.getMonth()
+    
+    const firstDay = `${year}-${String(month + 1).padStart(2, '0')}-01`
+    const lastDay = new Date(year, month + 1, 0)
+    const lastDayFormatted = `${year}-${String(month + 1).padStart(2, '0')}-${String(lastDay.getDate()).padStart(2, '0')}`
+    
+    setStartDate(firstDay)
+    setEndDate(lastDayFormatted)
   }
 
   const handleEditClick = (id: string) => {

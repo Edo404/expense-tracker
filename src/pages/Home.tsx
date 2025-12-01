@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { PlusCircle, TrendingDown, TrendingUp, Wallet } from 'lucide-react'
 import { useData } from '../context/DataContext'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts'
 
 interface HomeProps {
   setActiveTab?: (tab: string) => void
@@ -115,6 +115,35 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
     
     return Object.values(categoryTotals).sort((a, b) => b.value - a.value)
   }, [transactions, incomeCategories])
+
+  // Dati per istogramma spese/entrate mensili
+  const monthlyData = useMemo(() => {
+    const monthlyTotals: Record<string, { month: string; expenses: number; incomes: number }> = {}
+    
+    transactions.forEach(transaction => {
+      const date = new Date(transaction.date)
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+      const monthLabel = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+      
+      if (!monthlyTotals[monthKey]) {
+        monthlyTotals[monthKey] = {
+          month: monthLabel,
+          expenses: 0,
+          incomes: 0
+        }
+      }
+      
+      if (transaction.type === 'expense') {
+        monthlyTotals[monthKey].expenses += transaction.amount
+      } else {
+        monthlyTotals[monthKey].incomes += transaction.amount
+      }
+    })
+    
+    return Object.keys(monthlyTotals)
+      .sort()
+      .map(key => monthlyTotals[key])
+  }, [transactions])
 
   return (
     <div className="space-y-8">
@@ -276,6 +305,64 @@ export default function Home({ onAddExpense, onAddIncome }: HomeProps) {
                 name="Expenses"
               />
             </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">📊</div>
+            <p className="text-gray-500 text-lg">No data available</p>
+            <p className="text-gray-400 text-sm">Add transactions to view the chart</p>
+          </div>
+        )}
+      </div>
+
+      {/* Monthly Expenses vs Incomes Bar Chart */}
+      <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
+          <div className="w-1 h-6 md:h-8 bg-purple-600 rounded-full"></div>
+          Monthly Summary
+        </h2>
+        {monthlyData.length > 0 ? (
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart
+              data={monthlyData}
+              margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis 
+                dataKey="month" 
+                tick={{ fontSize: 12 }}
+                stroke="#888888"
+              />
+              <YAxis 
+                tick={{ fontSize: 12 }}
+                stroke="#888888"
+                tickFormatter={(value) => `€${value}`}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'white', 
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                }}
+                formatter={(value: number) => `€${value.toFixed(2)}`}
+              />
+              <Legend 
+                wrapperStyle={{ paddingTop: '20px' }}
+              />
+              <Bar 
+                dataKey="expenses" 
+                fill="#ef4444" 
+                name="Expenses"
+                radius={[8, 8, 0, 0]}
+              />
+              <Bar 
+                dataKey="incomes" 
+                fill="#10b981" 
+                name="Incomes"
+                radius={[8, 8, 0, 0]}
+              />
+            </BarChart>
           </ResponsiveContainer>
         ) : (
           <div className="text-center py-12">

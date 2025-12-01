@@ -125,23 +125,34 @@ export default function Accounts() {
         </div>
       </div>
 
-      {/* Add Account Button */}
-      <div className="flex justify-center md:justify-start">
+      {/* Add Account Button - Mobile Only */}
+      <div className="md:hidden">
         <button 
           onClick={() => setIsAddModalOpen(true)}
-          className="w-full md:w-auto bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base rounded-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
+          className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 py-2.5 text-sm rounded-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
         >
-          <PlusCircle className="w-4 h-4 md:w-5 md:h-5" />
+          <PlusCircle className="w-4 h-4" />
           New Account
         </button>
       </div>
 
       {/* Accounts List */}
       <div className="bg-white rounded-xl shadow-lg p-4 md:p-8">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2">
-          <div className="w-1 h-6 md:h-8 bg-purple-600 rounded-full"></div>
-          Your Accounts
-        </h2>
+        <div className="flex items-center justify-between mb-4 md:mb-6">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-2">
+            <div className="w-1 h-6 md:h-8 bg-purple-600 rounded-full"></div>
+            Your Accounts
+          </h2>
+          
+          {/* Add Account Button - Desktop Only */}
+          <button 
+            onClick={() => setIsAddModalOpen(true)}
+            className="hidden md:flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-3 text-base rounded-lg transition-all shadow-md hover:shadow-lg whitespace-nowrap"
+          >
+            <PlusCircle className="w-5 h-5" />
+            New Account
+          </button>
+        </div>
 
         <div className="space-y-4">
           {accounts.length > 0 ? (
