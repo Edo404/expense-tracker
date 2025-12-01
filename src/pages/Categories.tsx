@@ -344,7 +344,7 @@ export default function Categories() {
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleDeleteConfirm}
         categoryName={categoryToDelete?.name || ''}
-        categoryType={categoryToDelete?.type || 'expense'}
+        //categoryType={categoryToDelete?.type || 'expense'}
       />      {/* Add Category Modal */}
       <AddCategoryModal
         isOpen={isAddModalOpen}

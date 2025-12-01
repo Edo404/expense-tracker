@@ -5,15 +5,13 @@ interface DeleteConfirmModalProps {
   onClose: () => void
   onConfirm: () => void
   categoryName: string
-  categoryType: 'expense' | 'income'
 }
 
 export default function DeleteConfirmModal({ 
   isOpen, 
   onClose, 
   onConfirm, 
-  categoryName,
-  categoryType 
+  categoryName
 }: DeleteConfirmModalProps) {
   if (!isOpen) return null
 
